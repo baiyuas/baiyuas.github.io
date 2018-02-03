@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Jdk8 笔记一 | 拜雨の技博</title>
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url()">
+        <div class='av-pic' style="background-image: url(/assets/img/head.jpg)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>拜雨の技博</div>
+        
+            <div>Java，Android，前端</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>首页</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>归档</li>
+            </a>  
+          
+            <a href="/photos/" class="Btn">
+              <li>相册</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Jdk8 笔记一</h1>
+    </header>
+
+    <section>
+      <p>用法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">List&lt;Apple&gt; apples = new ArrayList&lt;&gt;();</div><div class="line">apples.add(new Apple(100, &quot;red&quot;));</div><div class="line">apples.add(new Apple(20, &quot;yellow&quot;));</div><div class="line">apples.add(new Apple(10, &quot;green&quot;));</div><div class="line">List&lt;Apple&gt; filterList = apples.stream().filter(Apple::isGreen).collect(Collectors.toList());</div></pre></td></tr></table></figure></p>
+<p>这是一个简单的jdk8中流的操作。将List转化为stream,之后过滤Apple是绿色的输出结果：</p>
+<blockquote>
+<p>[Apple{weight=100, color=’red’}, Apple{weight=20, color=’yellow’}, Apple{weight=10, color=’green’}]</p>
+</blockquote>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2018-02-01T06:28:44.000Z" itemprop="datePublished">
+              2018-02-01
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/jdk/">jdk</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - 刘鹏程 </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>
