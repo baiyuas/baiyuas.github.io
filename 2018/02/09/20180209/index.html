@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>鸟哥私房菜笔记一 | 拜雨の技博</title>
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url()">
+        <div class='av-pic' style="background-image: url(/assets/img/head.jpg)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>拜雨の技博</div>
+        
+            <div>Java，Android，前端</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>首页</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>归档</li>
+            </a>  
+          
+            <a href="/photos/" class="Btn">
+              <li>相册</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>鸟哥私房菜笔记一</h1>
+    </header>
+
+    <section>
+      <h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><p>显示日期命令 <strong>date</strong></p>
+<pre><code>&gt; date 显示当前日期
+&gt; date +%Y/%m/%d 格式化显示日期
+</code></pre><p>显示日历命令 <strong>cal</strong></p>
+<pre><code>&gt; cal 显示当前月份的日历
+&gt; cal 2018 显示指定年份的日历，全年12个月都会显示
+&gt; cal [options] [[[day] month] year]
+</code></pre><p>计算器 <strong>bc</strong></p>
+<blockquote>
+<p>bc 进入计算器模式</p>
+</blockquote>
+<p>退出命令 <strong>Ctrl+D</strong></p>
+<p>文本编辑 <strong>nano</strong>,打开文件后底部都有提示操作信息</p>
+<h2 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h2><p>Linux下的文件都是有权限控制，每个文件都有所属的用户和群组，非这个文件的所属用户或者群组是否不可以访问该文件。通过命令 <strong>&gt; ls -al</strong> 可以列出文件的详细信息。</p>
+<pre><code>[baiyuas@localhost file]$ ls -al
+权限      | 连接数 |拥有者 | 群组   | 文件容量|日期 |档名    
+drwxrwxr-x. 2 baiyuas baiyuas     64 Feb  7 22:44 .
+drwx------. 3 baiyuas baiyuas     97 Feb  7 23:14 ..
+-rw-rw-r--. 1 baiyuas baiyuas   4096 Feb  7 19:59 by.db
+-rw-r--r--. 1 baiyuas baiyuas  40960 Feb  7 22:44 hb.db
+-rw-rw-r--. 1 baiyuas baiyuas  14672 Feb  7 23:34 hb.sql
+-rw-r--r--. 1 baiyuas baiyuas 118784 Feb  7 01:54 test_hb.db
+</code></pre><p>这里说下权限 <strong>- rwx — —</strong> </p>
+<ul>
+<li><p>第一个代表文件类型</p>
+<blockquote>
+<p>【d】 表示是目录<br>【-】 表示文件<br>【l】 表示连接</p>
+</blockquote>
+</li>
+<li><p>之后的每三个一组，分表代表，文件拥有者的权限，同组的权限，其他的权限</p>
+<blockquote>
+<p>【r】 读取文件权限<br>【w】 修改文件的权限<br>【x】 可执行权限</p>
+</blockquote>
+</li>
+</ul>
+<p>举个栗子：有三个用户a, b, c，用户a和用户b是同组groupab中的用户，现在a用户登录查看文件详情 看到如下：</p>
+<blockquote>
+<p>-rw-rw-r–. 1 a groupab  14672 Feb  7 23:34 hb.sql</p>
+</blockquote>
+<p>这个时候，a对该文件有读写权限，b因为和a在同一个组所以也可以读写该文件。但是c用户只有读的权限，不可以修改该文件。如果权限是 <strong>-rw-r–r–</strong>则b用户也不可以修改，只能读取该文件</p>
+<h2 id="权限的修改"><a href="#权限的修改" class="headerlink" title="权限的修改"></a>权限的修改</h2><p>介绍来文件的权限后，我们会问如何修改权限呢？这里介绍三个命令</p>
+<pre><code>chgrp ：改变文件所属群组
+chown ：改变文件拥有者
+chmod ：改变文件的权限, SUID, SGID, SBIT等等的特性
+</code></pre><ul>
+<li><p><em>chgrp [-R] groupname file/dir..</em><br>该命令修改文件或者文件夹所属组，-R代表递归操作，会将要修改的目录以及其子孙目录一起修改所属的组</p>
+</li>
+<li><p><em>chown [-R] owner[:groupname] file/dir…</em><br>该命令是修改文件所有者[以及用户组]，例如 </p>
+<blockquote>
+<p>chown -R baiyuas hb.db</p>
+</blockquote>
+</li>
+</ul>
+<p>hb.db 的用户将会更换为baiyuas用户</p>
+<ul>
+<li><em>chmod [-R] xyz file/dir…</em><br>该命令是修改文件权限，这里讲个小点，<code>rwx</code> 分别用数字 <code>4，2，1</code>对应。举个栗子如果权限是这个样子<code>-rw-rw----</code>也就是用户和用户组有读写权限，现在想让用户组只能有读取权限，就需要使用命令<blockquote>
+<p>chmod 640 filename</p>
+</blockquote>
+</li>
+</ul>
+<p>就可以修改权限啦。如果你嫌这个太麻烦，那可以使用<code>u,g,o</code>来处理</p>
+<blockquote>
+<p>chmod u=rw,g=r filename</p>
+</blockquote>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2018-02-09T11:50:38.000Z" itemprop="datePublished">
+              2018-02-09
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/笔记/">笔记</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - 刘鹏程 </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>

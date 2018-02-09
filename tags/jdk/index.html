@@ -50,7 +50,7 @@
             <ul class="Index">
   
     <header class='PageTitle'>
-        <h1>{ JDK }</h1>
+        <h1>{ jdk }</h1>
     </header>
   
   
@@ -59,23 +59,19 @@
     <header class="title">
       
         <h1>
-          <a href="/2017/09/12/进阶之旅-认识JDK/">进阶之旅-认识JDK</a>
+          <a href="/2018/02/01/Jdk8-笔记/">Jdk8 笔记一</a>
         </h1>
       
       <div class='ListMeta'>
-  <time datetime="2017-09-12T03:32:47.000Z" itemprop="datePublished">
-    2017-09-12
+  <time datetime="2018-02-01T06:28:44.000Z" itemprop="datePublished">
+    2018-02-01
   </time>
   
   | 
   <ul>
     
   <li class="meta-text">
-  { <a href="/tags/JDK/">JDK</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/版本差异/">版本差异</a> }
+  { <a href="/tags/jdk/">jdk</a> }
   </li>
 
 
@@ -97,34 +93,39 @@
     </header>
     <div>
       
-        <p>学习Java这么久，从来没有系统的研究过，都是用什么搞什么。趁着现在时间整理下。</p>
-<h2 id="Java特性"><a href="#Java特性" class="headerlink" title="Java特性"></a>Java特性</h2><ol>
-<li>体积小。<blockquote>
-<p>主要体现在生成的可执行代码小</p>
-</blockquote>
-</li>
-<li>与平台无关<blockquote>
-<p>这个主要体现在JVM上。JVM具有可移植性，同时JVM又为Java可执行文件提供的运行环境，所以Java也就成为了可以在不同平台上运行的特点</p>
-</blockquote>
-</li>
-<li>更加简单的多线程支持<blockquote>
-<p> Java屏蔽的很多复杂的概念编码，包括临界区和信号量等，这就使得Java线程编程变的更加简单</p>
-</blockquote>
-</li>
-<li><p>动态特性</p>
+        <p>用法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">List&lt;Apple&gt; apples = new ArrayList&lt;&gt;();</div><div class="line">apples.add(new Apple(100, &quot;red&quot;));</div><div class="line">apples.add(new Apple(20, &quot;yellow&quot;));</div><div class="line">apples.add(new Apple(10, &quot;green&quot;));</div><div class="line">List&lt;Apple&gt; filterList = apples.stream().filter(Apple::isGreen).collect(Collectors.toList());</div></pre></td></tr></table></figure></p>
+<p>这是一个简单的jdk8中流的操作。将List转化为stream,之后过滤Apple是绿色的输出结果：</p>
 <blockquote>
+<p>[Apple{weight=100, color=’red’}, Apple{weight=20, color=’yellow’}, Apple{weight=10, color=’green’}]</p>
 </blockquote>
-<p> PS：这个Java特性一般面试时候会问到，很多大公司除了问一些纯技术知识外还会问一些理解类的问题，这个也算其中之一吧</p>
-</li>
-</ol>
-        
-          <div class="more-link">
-            <a href="/2017/09/12/进阶之旅-认识JDK/#more">Read On »</a>
-          </div>
-        
+
       
     </div>
 </article>
+
+    </li>
+  
+</ul>
+
+
+
+            <footer>
+    <div>© 2016 - 刘鹏程 </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>>
 
     </li>
   
