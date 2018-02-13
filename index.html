@@ -55,6 +55,96 @@
     <header class="title">
       
         <h1>
+          <a href="/2018/02/13/20180213/">20180213</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2018-02-13T06:21:23.000Z" itemprop="datePublished">
+    2018-02-13
+  </time>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>title: 鸟哥私房菜笔记二<br>date: 2018-02-09 19:50:38<br>categories: Linux<br>tags:</p>
+<pre><code>- 笔记
+</code></pre><hr>
+<h2 id="文件权限的补充"><a href="#文件权限的补充" class="headerlink" title="文件权限的补充"></a>文件权限的补充</h2><p>对于这个<code>x</code>，我一开始的理解是错误的。看到<strong>rwx</strong>，我的理解觉得是可执行文件的执行权限。然，否也。这个<code>x</code>不光是文件的可执行权限，同时还包含<code>cd</code>命令的权限，也就是说你是否可以切换到该目录下。<br>举个例子：首先使用<code>root</code>用户切换到<code>/tmp</code>目录下</p>
+<blockquote>
+<p>cd /tmp</p>
+</blockquote>
+<p>创建一个目录<code>test</code>，然后修改该文件夹权限组与其他用户只有<code>r</code>权限</p>
+<blockquote>
+<p>mkdir test<br>  chomd -R o=rwx,g=r,o=r</p>
+</blockquote>
+<p>这个时候如果切换到<code>baiyuas</code>这个用户使用命令<code>cd test</code>，则会提示</p>
+<blockquote>
+<p>bash: cd: test/: Permission denied</p>
+</blockquote>
+<h2 id="Linux下的文件目录"><a href="#Linux下的文件目录" class="headerlink" title="Linux下的文件目录"></a>Linux下的文件目录</h2><p>我们切换到根目录<code>/</code>目录下，执行<code>ls -al</code>命令看到如下文件目录：</p>
+<pre><code>/bin -&gt; usr/bin 多放置执行文件目录
+/boot 开机使用的文件目录，包含开机所需要的配置文件
+/dev 包含了所有Linux系统中的外部设备
+/etc 系统主要的配置文件目录
+* /etc/init.d/ 所有服务的启动脚本
+/home 家目录
+/lib -&gt; usr/lib 指令所需要的函式库，主要的是/lib/modules
+/lib64 -&gt; usr/lib64 64位系统中的函式库
+/media 挂载的软盘、光盘、DVD等设备
+/mnt 外置设备
+/opt 安装第三方软件的目录,一般会安装在 /usr/local/目录下
+/proc  虚拟文件目录，放置的数据存放在内容中
+/root 超级管理员的家目录 
+/sbin -&gt; usr/sbin root用户指令依赖库 
+/srv service的缩写，网络服务启动后所需要的数据目录，例如网页数据可以存放在/srv/www/目录下
+/sys 功能类似/proc目录
+/tmp 临时目录，重要数据库不可以存放
+/usr
+/var
+</code></pre><p>Linux下的文件目录就是一个树形结构，如下图(图片来自<a href="http://cn.linux.vbird.org/linux_basic/0210filepermission_3.php" target="_blank" rel="external">鸟哥私房菜</a>)<br><img src="http://cn.linux.vbird.org/linux_basic/0210filepermission_files/directory_tree.gif" alt="此处输入图片的描述"></p>
+<p><strong>容混淆的概念</strong></p>
+<blockquote>
+<p>/usr  是Unix Software Resources的缩写，不是user的缩写</p>
+</blockquote>
+<h3 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h3><p>这里介绍个知识点，</p>
+<blockquote>
+<p><strong>.</strong> 代表当前目录，<br>  <strong>..</strong> 代表上一级目录。<br>  <strong>-</strong> 代表前一个工作目录，比如，你当前在<code>/usr/local/</code>目录下，然后使用命令<code>cd /home/baiyuas/</code>你会切换到<code>/home/baiyuas/</code>目录下，如果你想在返回到<code>/usr/local/</code>目录下，可以使用<code>cd -</code>。<br>  <strong>~</strong> 代表家目录<br>  <strong>~userxx</strong> 代表userxx用户的家目录</p>
+</blockquote>
+<h3 id="目录相关的命令"><a href="#目录相关的命令" class="headerlink" title="目录相关的命令"></a>目录相关的命令</h3><ul>
+<li><strong>cd</strong><br>切换目录命令</li>
+<li><strong>pwd [-P]</strong><br>显示当前路径，-P显示当前确实的路径而非link的路径</li>
+<li><strong>mkdir [-mp]</strong><br>创建目录 -m 创建目录时候增加权限<code>mkdir -m 777 abc</code>。<br>-p 递归创建目录，可以创建多层目录<code>mkdir -p abc/ccc/a</code></li>
+<li><strong>rmdir -[p]</strong><br>删除空目录</li>
+<li><strong>echo $PATH</strong><br>查看当前环境变量信息</li>
+</ul>
+<h3 id="文件目录相关的命令"><a href="#文件目录相关的命令" class="headerlink" title="文件目录相关的命令"></a>文件目录相关的命令</h3><ul>
+<li><strong>cp [-aipr]</strong><br>-a 文件所有信息都复制过去<br>-i 如果文档存在提示是否覆盖<br>-p 连同文档树形一起复制过去<br>-r 复制目录使用<br>对于这个命令，我之前一直有个问题，比如有个文件夹<code>/home/baiyuas/ccc/</code>，我想把文件夹下所有复制到<code>/tmp/ccc/</code>下，但是<code>/tmp/</code>目录下没有<code>ccc</code>,学习后发现so easy.<blockquote>
+<p>cp -r /home/baiyuas/ccc/ /tmp/ccc</p>
+</blockquote>
+</li>
+<li><strong>rm [-r]</strong><br>-r 递归删除，有个特别情况，比如有个文件名称为<code>-aaa-</code>，这时候删除该文件就在文件前添加当前目录符号，使用命令<code>rm ./-aaa-</code></li>
+<li><strong>mv [-fiu]</strong><br>-f 如果目标文件存在则覆盖<br>-i 如果目标文件存在，提示是否覆盖<br>-u 若目标文件存在，且比source比较新，才会升级</li>
+<li><strong>rename</strong><br>修改文件名命令，可以批量修改<blockquote>
+<p><code>?</code> 可替代单个字符<br><code>*</code> 可替代多个字符<br><code>[charset]</code>  可替代charset集中的任意单个字符</p>
+</blockquote>
+</li>
+</ul>
+<p>例如：在/home/baiyuas/file/目录下有文件file1,file2..file10<br><code>rename file newfile newfile0?</code>命令会把file1, file2…file10重命名为newfile1,newfile2…newfile10,然后在重命名为newfile01,newfile02…newfile010</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2018/02/09/20180209/">鸟哥私房菜笔记一</a>
         </h1>
       
