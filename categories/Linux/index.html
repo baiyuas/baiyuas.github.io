@@ -59,6 +59,67 @@
     <header class="title">
       
         <h1>
+          <a href="/2018/02/13/20180213/">鸟哥私房菜笔记二</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2018-02-13T06:21:23.000Z" itemprop="datePublished">
+    2018-02-13
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/笔记/">笔记</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/Linux/">Linux</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <h2 id="文件权限的补充"><a href="#文件权限的补充" class="headerlink" title="文件权限的补充"></a>文件权限的补充</h2><p>对于这个<code>x</code>，我一开始的理解是错误的。看到<strong>rwx</strong>，我的理解觉得是可执行文件的执行权限。然，否也。这个<code>x</code>不光是文件的可执行权限，同时还包含<code>cd</code>命令的权限，也就是说你是否可以切换到该目录下。<br>举个例子：首先使用<code>root</code>用户切换到<code>/tmp</code>目录下</p>
+<blockquote>
+<p>cd /tmp</p>
+</blockquote>
+<p>创建一个目录<code>test</code>，然后修改该文件夹权限组与其他用户只有<code>r</code>权限</p>
+<blockquote>
+<p>mkdir test<br>  chomd -R o=rwx,g=r,o=r</p>
+</blockquote>
+<p>这个时候如果切换到<code>baiyuas</code>这个用户使用命令<code>cd test</code>，则会提示</p>
+<blockquote>
+<p>bash: cd: test/: Permission denied<br>
+        
+          <div class="more-link">
+            <a href="/2018/02/13/20180213/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2018/02/09/20180209/">鸟哥私房菜笔记一</a>
         </h1>
       
