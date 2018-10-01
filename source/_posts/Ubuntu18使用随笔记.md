@@ -96,6 +96,56 @@ downloads/jdk8-downloads-2133151.html)
 	彻底卸载
 	$ dpkg -P mysql-workbench
 
+* teamviewer
+
+先去官网下载[点我去下载](https://www.teamviewer.com/zhcn/download/linux/)，下载后通过如下命令安装
+
+	$ sudo dpkg -i teamviewer_13.2.13582_amd64.deb
+
+首次安装时候需要一些qt依赖，所以会安装失败，通过如下命令安装依赖
+
+	$ sudo apt install -f
+	$ sudo dpkg -i teamviewer_13.2.13582_amd64.deb
+
+这样就可以完成安装，有时候安装后无法启动，一般是权限问题，打开终端通过命令`teamviewer`启动，根据提示给对应文件夹权限就可以了
+
+* python-pip
+
+这是一个python依赖包管理工具，
+
+	$ apt install python-pip
+
+* tensorflow
+
+通过安装的`python-pip`安装tensorflow
+
+	$ pip install tentsorflow
+
+* Flutter
+
+这个是开发移动的SDK工具，这个需要使用影像下载，不然国内无法下载
+
+```
+export PUB_HOSTED_URL=https://pub.flutter-io.cn
+export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+git clone -b dev https://github.com/flutter/flutter.git
+export PATH="$PWD/flutter/bin:$PATH"
+cd ./flutter
+flutter doctor
+
+```
+在执行`flutter doctor`时候，如果没有安装`curl`会报错，需要先安装`curl`
+
+	$ sudo apt install curl
+
+另外这里配置`flutter`的环境变量是临时的，需要在配置文件将`flutter`的变量配置进去
+
+	$ vim ~/.bashrc
+
+>	export PUB_HOSTED_URL=https://pub.flutter-io.cn
+	export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+	export PATH=/home/baiyu/Android/flutter/bin:$PATH
+
 
 ## apt 软件安装命令
 
@@ -277,11 +327,35 @@ swappiness＝100的时候表示积极的使用swap分区，并且把内存上的
 
 * 将用户添加到用户组
 
-	usermod -a -G gourp user
+命令
+
+	$ usermod -a -G gourp user
 
 `-a`将用户添加到组，而不用离开其他组
 
 * 切换到上次的目录
 
+命令
+
 	cd -
+
+* 查看当前目录容量大小
+
+命令
+	
+	$ sudo du -sh
+	20G
+
+* 查看磁盘容量
+
+命令
+	
+	$ df -hl
+
+搜索文件
+
+命令
+	
+	$ find .  xx.txt // 查找但前目录以及子目录中xx.txt文件，可以使用通配符
+	$ find /home/leo/  xx.txt //查找指定目录 /home/leo 下的xx.txt文件
 	
