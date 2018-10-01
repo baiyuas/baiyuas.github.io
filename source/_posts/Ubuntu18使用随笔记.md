@@ -1,11 +1,14 @@
 ---
-title: Ubuntun18-随笔记
+title: Ubuntun使用之随笔记
 date: 2018-02-09 19:50:38
 categories: Linux
 tags:
 	- 笔记
-    - Ubuntu18
+    - Ubuntu
 ---
+
+
+笔记记录基于Ubuntu Desktop 18.04版本
 
 ## 软件安装
 
@@ -352,10 +355,20 @@ swappiness＝100的时候表示积极的使用swap分区，并且把内存上的
 	
 	$ df -hl
 
-搜索文件
+* 搜索文件
 
 命令
 	
 	$ find .  xx.txt // 查找但前目录以及子目录中xx.txt文件，可以使用通配符
 	$ find /home/leo/  xx.txt //查找指定目录 /home/leo 下的xx.txt文件
+
+* 查看版本号
+
+命令
+
+	$ cat /etc/issue // Ubuntu
+	$ cat /proc/version 
+	$ uname -a
+
+
 	
