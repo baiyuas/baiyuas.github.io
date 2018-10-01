@@ -1,5 +1,6 @@
 ## 1. Css使用的注释
->  /\*   */
+
+>  /\*   \*/
 
 ## 2. 各个浏览器Css前缀
 > **-webkit-** Chrome Safia<br>

@@ -82,4 +82,20 @@ Vue中的属性都是响应式的，当data中的值发生变化时候，vm中�
 
 ## 模板语法
 
+#### 插值
+
+Vue中使用的是双大括号的方式插入文本`{{msg}}`，msg会随着绑定的值变化，如果不想变化使用`v-once`	指令
+
+	<span v-once>这里不会变化 {{msg}} </span>
+
+如果要插入html代码需要使用`v-html`，否则会显示原始代码。
+	
+	<p>This is Html Effect <span v-html="htmlData"></span></p>
+
+对于Html中的属性值，需要使用`v-bind`来绑定
+
+	<p v-bind:id="pId"></p>
+
+
+
 
