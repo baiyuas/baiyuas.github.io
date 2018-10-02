@@ -9,6 +9,8 @@ tags:
 
 记录在Android开发过程中出现的Bug，持续更新！
 
+<!-- more -->
+
 ## 解决Didn't find class "com.baiyuas.ui.MainActivity" on path: DexPathList[[zip fi
 
 对于这个问题有多个原因，比较常见的是因为在清单文件里配置的和类的包名不一直，我这里出现这个问题原因是我在工程中是有来**multidex**分包，但是在**Application**中没有配置代码，

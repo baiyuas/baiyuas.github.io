@@ -6,7 +6,11 @@ tags:
     - GreenDao
 ---
 
+介绍GreenDao 升级和事务
+<!-- more -->
+
 ## 关于事务
+
 在Greendao中可以使用事务来处理一些sql的执行，一开始我是这样使用的
 	
 	db.beginTransaction();

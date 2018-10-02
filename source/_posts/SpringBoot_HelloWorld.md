@@ -6,6 +6,9 @@ tags:
     - SpringBoot
 ---
 
+搭建一个HelloWorld工程学会使用SpringBoot实现简单的请求响应操作，可以自己写接口调试
+
+<!-- more -->
 
 ### 添加依赖
 

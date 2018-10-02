@@ -18,7 +18,7 @@ tags:
 	}
 	    
 
-
+<!-- More -->
 ## [概述](https://developer.android.google.cn/topic/libraries/data-binding/)
 
 Databinding是谷歌提供的一套支持库，可以让你将数据绑定到布局文件中。

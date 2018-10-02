@@ -8,6 +8,7 @@ tags:
 
 Dagger是一个注入框架，更方便的管理类与类之间的关系，降低耦合。对于Dagger的说明，推荐这篇博文[Dagger 完全解析][1]，讲解的很详细。对于不了解Dagger的朋友很有帮助，我的这篇文章主要是我对一些注解的理解，方便快速使用Dagger。
 
+<!-- more -->
 
 ## Dagger基本使用
 Dagger核心的三个部分就是Compoment(容器)、Module(提供对象)、Inject(注入)，在Android中我们一般在Application中初始化容器，将需要的数据模型注入到容器中，在需要的地方通过Appliction获取容器之后就可以获取到数据。代码说明下：

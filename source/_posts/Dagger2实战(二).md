@@ -8,6 +8,8 @@ tags:
 
 本篇主要介绍下Dagger的Android扩展库的实战，官方的Todo-mvp-dagger示例介绍了如何在应用中使用dagger-android，但是都是集成DaggerAppliction或者DaggerActivity等，我不喜欢，这里介绍集成Appliction时候使用方法，
 
+<!-- more -->
+
 依赖库
 
     implementation "com.google.dagger:dagger:${libs.dagger}"

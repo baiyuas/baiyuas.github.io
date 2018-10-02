@@ -6,6 +6,9 @@ tags:
 	- Kotlin
 ---
 
+Kotlin学习过程中记录的笔记，部分内容会与Java做对比，更好的认识Kotlin
+<!-- more -->
+
 ## 关于this
 
 在Android中使用this 来指代Activity，在kotlin中要使用this@XXX
