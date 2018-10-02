@@ -1,3 +1,13 @@
+---
+title: Android 开发问题锦集
+date: 2018-09-19 19:50:38
+categories: Android
+tags: 
+    - Android
+    - Bug
+---
+
+记录在Android开发过程中出现的Bug，持续更新！
 
 ## 解决Didn't find class "com.baiyuas.ui.MainActivity" on path: DexPathList[[zip fi
 

@@ -1,3 +1,14 @@
+---
+title: Android 开发知识点小记
+date: 2018-09-19 19:50:38
+categories: Android
+tags: 
+    - Android
+---
+
+
+记录Android开发过程中一些开发问题，持续更新！
+
 ## 字符串使用TextUtil工具类
 
 拼接字符串
@@ -244,6 +255,7 @@ Android 8.0 对应用快捷方式做出了以下变更：
 * 旧版快捷方式仍然保留了它们在旧版 Android 中的功能，但您必须在应用中手动将它们转换成应用快捷方式。
 
 
+
 如需了解有关应用快捷方式变更的更多信息，请参阅固定快捷方式和微件预览功能指南。
 
 #### 网页表单自动填充
@@ -277,5 +289,10 @@ Android 8.0 对应用快捷方式做出了以下变更：
 	LinearInterpolator   以常量速率改变
 	OvershootInterpolator    向前甩一定值后再回到原来位置
 
+## Andorid 动画详解
 
+[Android动画](https://www.cnblogs.com/ldq2016/p/5407061.html "Android动画")
+
+## 模拟器端口转发命令
+    adb forward tcp:9999 tcp:9999
 
