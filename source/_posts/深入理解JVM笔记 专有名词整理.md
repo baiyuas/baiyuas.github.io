@@ -1,5 +1,5 @@
 ---
-title: 进阶之旅-专有名词整理
+title: 深入理解JVM笔记 专有名词整理
 date: 2017-09-12 11:28:15
 categories: "Java进阶"
 tags:

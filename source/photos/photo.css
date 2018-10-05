@@ -1,0 +1,47 @@
+.content-wrap {
+    padding: 10px!important;
+}
+
+/*
+图片效果
+*/
+
+.img-effect {
+    position: relative;
+    width: 30.8%;
+    float: left;
+    box-sizing: border-box;
+    margin: 15px 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.posts-expand .post-body .img-effect img {
+    width: 100%;
+    border-color: #fff;
+    padding: 0px;
+}
+
+.posts-expand .post-body .img-effect img:hover {
+    opacity: 0.7;
+}
+
+.img-effect .img_desc {
+    padding: 10px 20px;
+    text-align: center;
+    color: black;
+}
+
+.img-effect .img_desc p {
+    margin: 0px;
+}
+
+@media screen and (max-width: 680px) {
+    .img-effect {
+        width: 30%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .img-effect {
+        width: 45%;
+    }
+}

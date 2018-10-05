@@ -151,6 +151,36 @@ flutter doctor
 	export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 	export PATH=/home/baiyu/Android/flutter/bin:$PATH
 
+* net-tools
+
+我们经常会使用查看ip，Ubuntu18默认没有ifconfig 命令，需要安装net-tools
+
+	$ sudo apt install net-tools
+
+* Apache2
+
+Apache2 Web服务器，需要搭建自己服务器的可以安装
+
+	$ sudo apt install apache2
+
+关于Apache2的几个命令
+
+1. 查看Apache2运行状态
+
+	$ service apache2 status
+
+2. 查看apache2版本
+
+	$ apache2 -v
+
+3. 启动、关闭、重启服务
+
+	$ service apache2 start[restart|stop]
+
+配置文件所在目录 `/etc/apache2`
+
+整合tomcate可以参考[apache2整合tomcat进行项目部署](https://blog.csdn.net/qq_37317845/article/details/80899548)
+
 
 ## apt 软件安装命令
 
