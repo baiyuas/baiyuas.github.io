@@ -165,21 +165,25 @@ Apache2 Web服务器，需要搭建自己服务器的可以安装
 
 关于Apache2的几个命令
 
-1. 查看Apache2运行状态
-
-	$ service apache2 status
-
-2. 查看apache2版本
-
-	$ apache2 -v
-
-3. 启动、关闭、重启服务
-
-	$ service apache2 start[restart|stop]
+	$ service apache2 status // 查看Apache2运行状态
+	$ apache2 -v // 查看apache2版本
+	$ service apache2 start[restart|stop] // 启动、关闭、重启服务
 
 配置文件所在目录 `/etc/apache2`
 
 整合tomcate可以参考[apache2整合tomcat进行项目部署](https://blog.csdn.net/qq_37317845/article/details/80899548)
+
+
+* 花生壳
+
+下载地址[花生壳客户端](https://hsk.oray.com/download/#linux)
+
+安装后phddns相关命令
+
+	$ phddns status // 查看状态
+	$ phddns restart // 重启
+	$ phddns start // 启动
+	$ phddns stop // 停止
 
 
 ## apt 软件安装命令
