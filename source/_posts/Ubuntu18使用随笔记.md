@@ -185,6 +185,12 @@ Apache2 Web服务器，需要搭建自己服务器的可以安装
 	$ phddns start // 启动
 	$ phddns stop // 停止
 
+* openssh-server
+
+ssh服务器，安装命令
+	
+	$ sudo apt install openssh-server
+
 
 ## apt 软件安装命令
 
@@ -265,6 +271,22 @@ swappiness＝100的时候表示积极的使用swap分区，并且把内存上的
 	$ sudo chomd 771 /dev/kvm
 
 ## 常用操作
+
+### 设置`shell`别名
+
+在使用Ubuntu时候有些命令频繁使用，比如
+
+```
+$ cd xxx/xxx
+$ ./gradlew assembleRelease
+```
+上面是我编译apk时候命令，打开终端总要切换到工作目录在执行编译，使用别名就简单多了
+在家目录下.bashrc文件，编辑该文件，添加
+	
+	alias buildApk='cd xxx/xxx&&./gradlew assembleRelease'
+
+`&&`代表上一个命令执行成功后在执行后面命令，`||`表示上一个命令执行失败后执行下一个命令
+`;`不管执行结果
 
 ### 给应用创建桌面快捷方式
 
@@ -406,5 +428,40 @@ swappiness＝100的时候表示积极的使用swap分区，并且把内存上的
 	$ cat /proc/version 
 	$ uname -a
 
+* systemctl
 
+系统服务管理命令
+
+查看服务状态
+
+	$ systemctl status xx.service
+
+启动，停止，重启服务
+
+	$ systemctl start[restart|stop] xx.service
+
+查看ssh服务状态
+
+	$ ps -e | grep ssh
+
+* opendir (自定义命令)
+
+该命令是在终端打开当前目录的文件夹。需要安装nautilus-open-terminal，默认Ubuntu自带
+在/usr/bin下增加opendir
+
+	$ sudo vim /usr/bin/opendir
+
+编辑如下内容
+```
+if [ -n "$1" ]; then
+	nautilus "$1" > /dev/null 2>&1
+else
+	nautilus "$(pwd)" > /dev/null 2>&1
+fi
+```
+
+	$ sudo chmod 711 /usr/bin/opendir
+	$ sudo chown xxx（当前用户） /usr/bin/opendir
+
+之后在终端执行opendir就可以在文件管理器打开当前目录了
 	
