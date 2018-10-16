@@ -99,3 +99,16 @@ Kotlin中
         return result
     }
 
+## 关于集合
+
+```
+// 只读
+var map = mapOf("a" to 1, "b" to 2)
+
+// 可以动态修改
+var map = mutableMapOf<String, String>().apply {
+	put("a", "1")
+	put("b", "2")
+}
+
+```
