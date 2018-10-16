@@ -1,13 +1,12 @@
 ---
-title: Android-Jetpack架构之Databinding
+title: Android Jetpack架构之Databinding
 date: 2018-09-19 19:50:38
 categories: Android
 tags: 
-	- Android
-	- Jetpack
-	- Databinding
----  
-
+    - Android
+    - Jetpack
+    - Databinding
+---
 
 Databinding是谷歌提供的一套支持库，可以让你将数据绑定到布局文件中。对于这个高大上的东西我觉得还是学习官方文档更加有效，而且官方文档讲解的也比较详细，虽然有中文版本，但是感觉还是自己翻译学习比较有效果。所以有了这边译文。
 
