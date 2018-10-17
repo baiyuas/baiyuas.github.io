@@ -7,3 +7,9 @@ tags:
     - Linux
 ---
 
+该章节学习Linux中的Shell以及Shell脚本文件的编写。当然写脚本就要操作文本文档，就需要使用到编辑工具Vim，所以先学习Vim命令
+
+ <!-- more --> 
+
+# Vim编辑器
+

@@ -221,6 +221,15 @@ dpkg命令
 
 ## 常见问题
 
+### 重启sshd服务失败
+
+在执行`systemctl restart sshd.service`时候报错***Failed to restart sshd.service: Interactive authentication required.***
+
+解决：权限不足
+
+	$ sudo systemctl restart sshd.service
+
+
 ### 使用git文件名问题
 
 使用`git status`命令后文件名显示`Ubuntu\344\275\277\347\224\250\347\254\224\350\256\260.md`，使用如下命令解决
