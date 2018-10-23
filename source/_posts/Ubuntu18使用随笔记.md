@@ -221,6 +221,11 @@ dpkg命令
 
 ## 常见问题
 
+### Firefox无法在先播放音乐的问题
+
+	sudo apt-get install ubuntu-restricted-extras
+
+
 ### 重启sshd服务失败
 
 在执行`systemctl restart sshd.service`时候报错***Failed to restart sshd.service: Interactive authentication required.***

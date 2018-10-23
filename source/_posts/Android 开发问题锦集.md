@@ -106,7 +106,7 @@ android.support.v4.app.FragmentManagerImpl.addFragment(FragmentManager.java:1891
     else
     	dialogFragment.show();
 
-# 解决Activity切换动画无效果问题
+## 解决Activity切换动画无效果问题
  
 我这是Activity切换动画是通过主题统一设置的，在sytle中配置了
 
@@ -117,3 +117,21 @@ android.support.v4.app.FragmentManagerImpl.addFragment(FragmentManager.java:1891
 	android:windowIsTranslucent="true"
 
 去掉这个属性就可以了，设置这个属性，切换动画就无效果
+
+## 使用gradlew 动态传入参数 -P
+
+在使用`gradle`w命令打包时候不想每次都去修改`build.gradle`文件中设置的变量，这时候就需要使用动态参数
+
+* 命令行
+
+如果你使用的命令行打包，需要通过`graldew`的`-P`参数类传入。
+
+    $ ./gradlew clean assembleRelease -PversionName=1.2.3 // linux命令
+    C:Project> gradlew clean assembleRelease -PversionName=1.2.3 // Window
+
+> ***注***
+这里有个点需要注意,如果你传入的参数在代码中定义为字符串需要转移，例如 `-PuserName=\"Hello\"`
+
+* Android Studio打包
+
+使用工具打包，需要在Android Studio中配置参数 路径 `File->Setting->Compiler->Command-line Options`中配置`-PversionName=1.2.3`
