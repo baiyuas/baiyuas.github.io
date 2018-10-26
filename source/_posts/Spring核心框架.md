@@ -150,3 +150,82 @@ public class ServiceFactory {
 
 **基于构造的注入**
 
+构造函数中的参数多种类型，所以针对不同情况使用不同的配置
+
+- 参数类型类型明确
+
+对于明确的参数类型可以直接引用注入，例如下面对象
+```
+public class NeedDiService {
+
+    private Fun1Dao fun1Dao;
+
+    private Fun2Dao fun2Dao;
+
+    public NeedDiService(Fun1Dao fun1Dao, Fun2Dao fun2Dao) {
+        this.fun1Dao = fun1Dao;
+        this.fun2Dao = fun2Dao;
+    }
+}
+
+```
+参数不存在歧义，所以不需要显示在***`<constructor-arg /`>***中指定
+```
+...
+
+<bean id="fun1Dao" class="com.spring.di.Fun1Dao"/>
+<bean id="fun2Dao" class="com.spring.di.Fun2Dao"/>
+<bean id="service" class="com.spring.di.NeedDiService">
+    <constructor-arg ref="fun1Dao"/>
+    <constructor-arg ref="fun2Dao"/>
+</bean>
+
+....
+```
+如果参数类型是基本数据类型并且没有歧义如下
+
+```
+public class NeedDiBean {
+    private int age;
+    private String name;
+
+    public NeedDiBean(int age, String name) {
+        this.age = age;
+        this.name = name;
+    }
+}
+```
+在`<constructor-arg`中直接指定值即可
+```
+<bean name="diffSimpleType" class="com.spring.di.NeedDiBean">
+    <constructor-arg value="30"/>
+    <constructor-arg value="Json"/>
+</bean>
+```
+
+- 存在歧义冲突的参数
+
+如果构造中多个参数都是同一个类型，这时候就需要在`<constructor-arg />`中指定参数的位置
+
+```
+public NeedDiBean(String name, String address) {
+    this.name = name;
+    this.address = address;
+}
+
+// xml中
+<bean name="ambiguityArgs" class="com.spring.di.NeedDiBean">
+    <constructor-arg index="0" value="Jack"/>
+    <constructor-arg index="1" value="US.Washington"/>
+</bean>
+```
+
+除了使用`<constructor-arg />`中指定`index`来处理构造中相同类型的冲突，可以使用`name`字段来解决。
+
+```
+<bean name="ambiguityArgs" class="com.spring.di.NeedDiBean">
+    <constructor-arg name="name" value="Jack"/>
+    <constructor-arg name="address" value="US.Washington"/>
+</bean>
+```
+
