@@ -8,6 +8,7 @@ tags:
 
 # Beans
 
+## 配置文件的基础属性
 
 #### name属性
 
@@ -143,16 +144,15 @@ public class ServiceFactory {
 - class与factory-method，通过对象的静态工厂方法获取
 - factory-name与factory-method 通过反射到指定对象的非静态方法获取实例
 
-#### constructor-args属性
-
+## 注入方式
 
 说道`constructor-args`属性，就会说道注入，在Spring 中注入的原则是代码更加整洁。注入有两种主要的注入方式： 基于构造函数的注入和基于Setter的注入
 
-**基于构造的注入**
+### 基于构造的注入
 
 构造函数中的参数多种类型，所以针对不同情况使用不同的配置
 
-- 参数类型类型明确
+- **参数类型类型明确**
 
 对于明确的参数类型可以直接引用注入，例如下面对象
 ```
@@ -169,7 +169,9 @@ public class NeedDiService {
 }
 
 ```
+
 参数不存在歧义，所以不需要显示在***`<constructor-arg /`>***中指定
+
 ```
 ...
 
@@ -180,8 +182,9 @@ public class NeedDiService {
     <constructor-arg ref="fun2Dao"/>
 </bean>
 
-....
+...
 ```
+
 如果参数类型是基本数据类型并且没有歧义如下
 
 ```
@@ -195,7 +198,9 @@ public class NeedDiBean {
     }
 }
 ```
+
 在`<constructor-arg`中直接指定值即可
+
 ```
 <bean name="diffSimpleType" class="com.spring.di.NeedDiBean">
     <constructor-arg value="30"/>
@@ -203,7 +208,7 @@ public class NeedDiBean {
 </bean>
 ```
 
-- 存在歧义冲突的参数
+- **存在歧义冲突的参数**
 
 如果构造中多个参数都是同一个类型，这时候就需要在`<constructor-arg />`中指定参数的位置
 
@@ -228,4 +233,37 @@ public NeedDiBean(String name, String address) {
     <constructor-arg name="address" value="US.Washington"/>
 </bean>
 ```
+
+### 基于Setter的注入
+
+基于`Setter`的注入是在你的实体类被容器反射调用无参构造或者静态工厂实例化后调用setter方法注入。
+下面示例展示了通过setter注入
+
+```
+public class NeedDiBean {
+    private String address;
+
+    public void setAddress(String address) {
+        System.out.println("Spring call setAddress di address -->" + address);
+        this.address = address;
+    }
+}
+
+// xml配置
+
+    <bean name="setterDi" class="com.spring.di.NeedDiBean">
+        <property name="address" value="Shijiazhuang Qiao Xi Region"/>
+    </bean>
+```
+
+我们可以看到配置setter方法通过`property`标签配置，`name`配置实体类中需要注入的属性，`value`设置值，如果`address`是`Object`可以使用`ref`如下
+
+```
+ <bean name="setterDi" class="com.spring.di.NeedDiBean">
+    <property name="address" ref="address"/>
+</bean>
+<bean name="address" class="com.spring.di.Address" />
+```
+
+### 基于构造的注入 VS 基于Setter的注入
 

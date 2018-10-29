@@ -192,6 +192,11 @@ ssh服务器，安装命令
 	$ sudo apt install openssh-server
 
 
+* virtualbox
+
+[官网下载](https://www.virtualbox.org/wiki/Downloads)下载昊安装包后，通过`dpkg -i xxx.deb`安装。
+安装时候提示缺少依赖，按着提示安装即可
+
 ## apt 软件安装命令
 
 添加软件源
@@ -220,6 +225,17 @@ dpkg命令
 
 
 ## 常见问题
+
+### 管理登录页面用户
+
+在启动电脑进入登录页面后你添加的用户都会显示在列表中，如果只想展示一个用户，需要进入`/var/lib/AccountsService/users`目录，该目录下列出了所有用户，打开对应的用户文件
+
+> [User]
+XSession=
+SystemAccount=false
+
+只要将SystemAccount = true即可
+
 
 ### Firefox无法在先播放音乐的问题
 
