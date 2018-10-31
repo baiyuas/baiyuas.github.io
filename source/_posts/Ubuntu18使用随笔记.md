@@ -197,6 +197,9 @@ ssh服务器，安装命令
 [官网下载](https://www.virtualbox.org/wiki/Downloads)下载昊安装包后，通过`dpkg -i xxx.deb`安装。
 安装时候提示缺少依赖，按着提示安装即可
 
+我安装的是Win7系统，在新建虚拟机后，启动总是提示`No bootable medium found! System halted`错误，网上多数都是因为没有配置ios影像，我也配置了，后来发现需要安装***安装版***的系统影像，分享个链接[http://down.u567.cn:8080/soft/Windows%207%20x64.iso](http://down.u567.cn:8080/soft/Windows%207%20x64.iso)
+下载这个启动就可以了
+
 ## apt 软件安装命令
 
 添加软件源
@@ -225,6 +228,11 @@ dpkg命令
 
 
 ## 常见问题
+
+### 解决vbox模拟器和android模拟器不能共存、
+
+命令
+	$ sudo rmmod kvm_intel kvm
 
 ### 管理登录页面用户
 
@@ -502,3 +510,14 @@ ssh免密码登录，想要通过ssh免密码远程登录另外一个主机，�
 	$ ssh-copy-id -o StrictHostKeyChecking=no xxx@xxx.xxx.x.xx
 
 这样就可以进行免密码登录了
+
+
+* [内存和Cpu相关命令](https://www.cnblogs.com/xd502djj/archive/2011/03/01/1968041.html)
+
+查看内存使用状况，类似Windows中任务管理器中效果
+
+	$ top 
+
+查看内存整体使用情况
+
+	$ free [-m ][- g] // 或者cat /proc/meminfo

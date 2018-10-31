@@ -267,3 +267,79 @@ public class NeedDiBean {
 
 ### 基于构造的注入 VS 基于Setter的注入
 
+对于这两种注入你可能会不知道如何使用，一个很好的原则就是对于必须的依赖通过构造注入，对于一些可选的依赖使用基于方法注入。Spring官方推荐使用构造注入，但是如果你的代码中太多的构造注入，应该考虑重构你的代码。
+
+Setter注入主要用于在类中可以设置默认值的可选依赖。否则在使用依赖以后都会进行非空检查。Setter注入的一个优势就是可以进行重新注入和配置。
+
+对于一些特定类(例如第三方类)，使用依赖注入是很有效的方式。例如某些第三方代码没有对你暴露setter方法，这时候使用构造注入是一个很有效的方式
+
+
+## 注入的实际应用
+
+如上所述，你座定义的实体类和构造函数参数可以定义为其他对象的引用，也可以定义为内敛定义的值。Spring配置的xml文件通过`<property>`和`<constructor-arg />`元素来支持。
+
+对于多个setter注入的参数可以使用自定义命名空间如下
+
+```
+<bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <!-- results in a setDriverClassName(String) call -->
+    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    <property name="url" value="jdbc:mysql://localhost:3306/mydb"/>
+    <property name="username" value="root"/>
+    <property name="password" value="masterkaoli"/>
+</bean>
+
+可以写作如下：
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close"
+        p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://localhost:3306/mydb"
+        p:username="root"
+        p:password="masterkaoli"/>
+
+</beans>
+```
+Spring也支持`java.util.Properties`的注入方式如下：
+
+```
+public class PropertiesDiBean {
+
+    private Properties properties;
+
+    public void setProperties(Properties properties) {
+        System.out.println("Spring call PropertiesDiBean`s setProperties Function: " + properties.toString());
+        this.properties = properties;
+    }
+}
+
+// Properties通过一组值来配置
+<bean name="propertiesDi" class="com.spring.di.PropertiesDiBean">
+    <property name="properties">
+        <value>
+            jdbc.driver.className=com.mysql.jdbc.Driver
+            jdbc.url=jdbc:mysql://localhost:3306/mydb
+            user.name=Jack
+        </value>
+    </property>
+</bean>
+```
+Spring会通过`PropertyEditor`机制将`<value />`元素转换成一个`java.util.Properties`实例。这种有效的方式是Spring对属性嵌套`value`元素的一种方式。
+另外还可以通过`props>`元素配置
+
+```
+<bean name="propertiesDiStyle2" class="com.spring.di.PropertiesDiBean">
+    <property name="properties">
+        <props>
+            <prop key="jdbc.driver.className">com.mysql.jdbc.Driver</prop>
+            <prop key="jdbc.url">jdbc:mysql://localhost:3306/mydb</prop>
+        </props>
+    </property>
+</bean>
+```
