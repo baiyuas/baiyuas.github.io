@@ -200,6 +200,13 @@ ssh服务器，安装命令
 我安装的是Win7系统，在新建虚拟机后，启动总是提示`No bootable medium found! System halted`错误，网上多数都是因为没有配置ios影像，我也配置了，后来发现需要安装***安装版***的系统影像，分享个链接[http://down.u567.cn:8080/soft/Windows%207%20x64.iso](http://down.u567.cn:8080/soft/Windows%207%20x64.iso)
 下载这个启动就可以了
 
+* lrzsz
+
+Linux上可以代替ftp上传下载的命令	
+
+	$ rz
+	$ sz
+
 ## apt 软件安装命令
 
 添加软件源
@@ -228,6 +235,10 @@ dpkg命令
 
 
 ## 常见问题
+
+### 创建自启动服务
+
+网上找了很多，比较详细的是这个[ubuntu-server-18.04 设置开机启动脚本](http://www.cnblogs.com/defifind/p/9285456.html)
 
 ### 解决vbox模拟器和android模拟器不能共存、
 
