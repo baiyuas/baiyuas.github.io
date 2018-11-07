@@ -343,3 +343,22 @@ Spring会通过`PropertyEditor`机制将`<value />`元素转换成一个`java.ut
     </property>
 </bean>
 ```
+
+对于实体类中对象的引用，我们通常使用`<ref>`标签，当然我们也可以直接在`<constractor />`或者`<property />`
+标签中使用`<baen>`来注入如下：
+
+```
+<bean name="outerBean" class="com.spring.bean.OuterBean">
+
+    <property name="target">
+        <bean class="com.spring.bean.OuterBean$InnerBean">
+            <property name="innerArg1" value="InnerArg1"/>
+            <property name="innerArg2" value="InnerArg2"/>
+        </bean>
+    </property>
+
+    <property name="arg1" value="outerArgs1"/>
+    <property name="arg2" value="outerArgs2"/>
+</bean>
+```
+
