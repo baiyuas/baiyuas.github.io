@@ -207,6 +207,25 @@ Linux上可以代替ftp上传下载的命令
 	$ rz
 	$ sz
 
+
+* vim 插件Vundle
+
+安装地址：[https://github.com/VundleVim/Vundle.Vim#quick-start(https://github.com/VundleVim/Vundle.Vim#quick-start)
+
+命令无效解决:[https://blog.csdn.net/silinga/article/details/80059006](https://blog.csdn.net/silinga/article/details/80059006)
+
+插件库：[http://vim-scripts.org/vim/scripts.html](http://vim-scripts.org/vim/scripts.html)
+
+[Mardkown语法高亮](https://github.com/plasticboy/vim-markdown)
+[Markdown实时预览](https://github.com/suan/vim-instant-markdown)
+[代码智能补全](https://github.com/Valloric/YouCompleteMe#linux-64-bit)
+[代码智能补全2](https://www.cnblogs.com/Suzzz/p/4071880.html)
+
+* redshift 护眼软件
+
+	$ sudo add-apt-repository ppa:dobey/redshift-daily
+	$ sudo apt-get install redshift-gtk
+
 ## apt 软件安装命令
 
 添加软件源
@@ -235,6 +254,11 @@ dpkg命令
 
 
 ## 常见问题
+
+### 启动sshd服务失败
+
+电脑断电后，重启，IP 被占用，然后修改IP,没有修改sshd_config中的ip所以失败了
+
 
 ### 创建自启动服务
 
@@ -532,3 +556,9 @@ ssh免密码登录，想要通过ssh免密码远程登录另外一个主机，�
 查看内存整体使用情况
 
 	$ free [-m ][- g] // 或者cat /proc/meminfo
+
+查看端口使用情况
+
+	$ netstat -tunlp |grep 80
+
+

@@ -306,7 +306,9 @@ Setter注入主要用于在类中可以设置默认值的可选依赖。否则�
 
 </beans>
 ```
-Spring也支持`java.util.Properties`的注入方式如下：
+**Spring也支持`java.util.Properties`的注入**
+
+方式如下：
 
 ```
 public class PropertiesDiBean {
@@ -361,4 +363,300 @@ Spring会通过`PropertyEditor`机制将`<value />`元素转换成一个`java.ut
     <property name="arg2" value="outerArgs2"/>
 </bean>
 ```
+
+**Spring中对集合的注入**
+
+针对Collection类型的`List`, `Set`, `Map`, `Properties`注入时候使用`<list/>`, `<set/>`, `<map/>`, 和`<props/>`标签， 如下：
+
+```
+public class CollectionsDiBean {
+
+    private List<String> list;
+
+    private Map<String, String> map;
+
+    private Set set;
+
+    private Properties properties;
+
+    ......
+}
+
+xml注入配置
+
+ <bean class="com.spring.bean.CollectionsDiBean">
+        
+        <!-- Properties类型注入 -->
+        <property name="properties">
+            <props>
+                <prop key="jdbc.driver.className">com.mysql.jdbc.Driver</prop>
+                <prop key="jdbc.url">jdbc:mysql://localhost:3306/mydb</prop>
+            </props>
+        </property>
+        <!-- List类型注入 -->
+        <property name="list">
+            <list>
+                <value>Jack</value>
+                <value>JLeo</value>
+                <value>Bill</value>
+            </list>
+        </property>
+        <!-- Map类型注入 -->
+        <property name="map">
+            <map>
+                <entry key="Id" value="DM233ms83"/>
+                <entry key="name" value="Baiyu"/>
+            </map>
+        </property>
+        <!-- Set类型注入 -->
+        <property name="set">
+            <set>
+                <value>SetValueA</value>
+                <value>SetValueB</value>
+            </set>
+        </property>
+    </bean>
+
+```
+
+对于集合类型的标签 `<list/>`, `<set/>`, `<map/>`, 和`<props/>`可以使用属性`merge`来合并子类注入的集合到父类属性中，如下：
+
+```
+父类
+public class Parent {
+    
+    private List<String> list;
+
+    public void setList(List<String> list) {
+        this.list = list;
+    }
+}
+
+子类
+public class Child extends Parent {
+
+}
+
+xml配置
+
+    <bean id="parentBean" class="com.spring.bean.Parent" >
+        <property name="list">
+            <list>
+                <value>ListItem1</value>
+                <value>ListItem2</value>
+                <value>ListItem3</value>
+            </list>
+        </property>
+        <property name="address" value="Washington, D.C., USA " />
+        <property name="name" value="Benjamin" />
+    </bean>
+    <bean id="mergeChildBean" class="com.spring.bean.Child" parent="parentBean">
+        <property name="list">
+            <list merge="true"> <!-- 注意list标签使用属性merge="true" -->
+                <value>ListItem4</value>
+                <value>ListItem5</value>
+                <value>ListItem6</value>
+            </list>
+        </property>
+    </bean>
+```
+
+这样Child输出的list结合就是
+
+> list=[ListItem1, ListItem2, ListItem3, ListItem4, ListItem5, ListItem6]}
+
+**Spring支持注入空字符串和null**
+
+如下xml配置将会注入字符串变量为`""`
+
+```
+<bean class="ExampleBean">
+    <property name="email" value=""/>
+</bean>
+```
+
+如下xml配置将会注入字符串变量为`null`
+
+```
+<bean class="ExampleBean">
+    <property name="email">
+        <null/>
+    </property>
+</bean>
+```
+
+** Spring 支持使用`p命令空间`和`c命名空间` **
+
+为了方便，Spring可以在xml中配置p的命名空间代替`<property>`，c命名空间替代`<constractor-arg>`使得书写更加方便，如下：
+
+```
+public class Pet {
+
+    private String name;
+    private String nick;
+
+    public Pet(String name) {
+        this.name = name;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "name='" + name + '\'' +
+                ", nick='" + nick + '\'' +
+                '}';
+    }
+}
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+        <!--注意下面命名空间 -->
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="com.spring.bean.Pet"
+          c:name="Sweet"
+          p:nick="honey"
+    />
+
+</beans>
+```
+
+**Spring中使用组合属性**
+
+组合属性就是在一个实体类中的属性是另外一个对象，多层这样的设置，如下：
+
+```
+public class ThingOne {
+
+    private Fred fred;
+
+    public ThingOne() {
+        // 必须
+        this.fred = new Fred();
+    }
+
+    public Fred getFred() {
+        return fred;
+    }
+
+    public class Fred {
+        private Bob bob;
+
+        public Fred() {
+            // 必须
+            this.bob = new Bob();
+        }
+
+        public Bob getBob() {
+            return bob;
+        }
+    }
+
+    public class Bob {
+        private String sammy;
+
+        public void setSammy(String sammy) {
+            this.sammy = sammy;
+        }
+    }
+}
+```
+这时候如果我们向给`sammy`属性注入值就可以使用下面的配置方式
+
+```
+<bean id="something" class="com.spring.bean.ThingOne">
+    <property name="fred.bob.sammy" value="Jack"/>
+</bean>
+```
+这里要注意几点：
+1. `fred`和`bob`都要在构造中实例化否则会出现空指针
+2. 我们可以看到使用组合属性，`fred`和`bob`都是get方法，只有真正注入的sammy是set方法，所以我们也可以推断出Spring执行流程，先实例化`ThingOne`对象，然后调用`getFred()`方法获取`fred`，在调用Fred的`getBob()`方法。获取到Bob对象，最后通过`setSammy()`方法将值`Jack`注入到Bob中
+
+
+**在Spring中使用depends-on**
+
+同禅的直接依赖都是一个实体类作为另外一个实体类的属性而注入其中，而`depends-on`标签主要适用于间接的依赖。
+举个例子：实体类A实例化后使用依赖于B实例化，B实例化后会出发BB事件，而A的使用必须先执行BB事件，但是B和A并没有直接关系。又比如`Dao Bean`实例化之前必须先初始化`Database`，而`Dao Bean`并不需要持有`Database Bean`，如果Database没有初始化，`Dao Bean`实例化也没有实际意义。
+
+通过`depends-on`一个Bean可以依赖多个实体类。
+
+```
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 如果需要依赖多个实体类则使用,分割 -->
+    <bean name="dao" class="research.spring.beanfactory.ch3.Dao" depends-on="database"/>
+    <bean id="database" class="research.spring.beanfactory.ch3.Database" />
+</beans>
+```
+
+**在Spring中使用lazy-init**
+
+通过在xml配置`<bean />`属性`lazy-init`来控制实体类是否需要在加载Spring的上下文`ApplictionContext`时候实例化Bean
+
+
+
+**在Spring中使用autowire**
+
+Spring可以在`<bean>`标签中使用`autowire`属性实现自动装配，所谓自动装配也就是你在xml中配置对应的bean不需要通过`property`或者`constructor`来注入，Spring框架自动完成注入。自动装配一共有四种模式
+
+- no
+
+默认的不使用自动装配
+
+- byName
+
+将通过xml中配置的`<bean>`标签的`id`或者`name`来调用set方法装配， 如下
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dept" class="com.spring.bean.Department">
+        <property name="name" value="Develop"/>
+    </bean>
+
+    <bean id="employee" class="com.spring.bean.Employee" autowire="byName"/>
+
+</beans>
+```
+Employee中set方法名称必须与Department配置的id或者name保持一直否则无法自动装配
+
+
+- byType
+
+当设置byType后不需要保持id或者name与类中set方法名称保持一直，Spring会自动根据属性的类型通过set方法注入
+
+```
+...
+<bean id="dept" class="com.spring.bean.Department">
+    <property name="name" value="Develop"/>
+</bean>
+<bean id="employee" class="com.spring.bean.Employee" autowire="byType"/>
+
+....
+```
+当xml中配置多个Department时候将会注入失败，Spring无法识别应该装配哪个，反过来如果实体类中有多个相同类型的属性，xml中配置一个，则多个属性都会注入xml配置的实体类
+
+- constructor
+
+顾名思义通过构造自动装载
+
+
+***注：当配置了byTyo或者byName装配时候，优先级会低于property配置的注入***
+
+以上集中方式可以实现自动装配对象，如果对于莫个对象你不想它被别的实体类装配可以在它的`<bean/>`标签使用`autowire-candidate`属性设置为false即可
+
+>  <bean name="address" class="com.spring.bean.Address" p:name="Hebei" autowire-candidate="false"/>
+
+
 
