@@ -226,6 +226,11 @@ Linux上可以代替ftp上传下载的命令
 	$ sudo add-apt-repository ppa:dobey/redshift-daily
 	$ sudo apt-get install redshift-gtk
 
+* fish-shell
+
+这是一个很好用的bash终端，比Ubuntu默认的好用，带有记忆功能
+更多使用参考[如何在 Linux 中安装、配置和使用 Fish Shell](https://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&mid=2666543850&idx=1&sn=fa2e99241d893294d303b4e24854b1c5&chksm=80dcfe41b7ab7757792a1f5710a0f83aa8f25a1bb948f372d9821ac1f652929c077d1926fc77&mpshare=1&scene=1&srcid=0321uBSy2q7DGTSWBypTvA6e&pass_ticket=TibiJijFE8acm%2BGL96Px4ivFOw17o4vfUD3hdvDYJRAisKw6r0BE%2B24gmCs91597#rd)
+
 ## apt 软件安装命令
 
 添加软件源
@@ -268,6 +273,10 @@ dpkg命令
 
 命令
 	$ sudo rmmod kvm_intel kvm
+
+### 关闭Apache开机自启动
+
+[https://blog.csdn.net/geeksoarsky/article/details/80083557](https://blog.csdn.net/geeksoarsky/article/details/80083557)
 
 ### 管理登录页面用户
 
