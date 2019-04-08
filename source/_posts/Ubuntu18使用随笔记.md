@@ -192,6 +192,45 @@ ssh服务器，安装命令
 	$ sudo apt install openssh-server
 
 
+* virtualbox
+
+[官网下载](https://www.virtualbox.org/wiki/Downloads)下载昊安装包后，通过`dpkg -i xxx.deb`安装。
+安装时候提示缺少依赖，按着提示安装即可
+
+我安装的是Win7系统，在新建虚拟机后，启动总是提示`No bootable medium found! System halted`错误，网上多数都是因为没有配置ios影像，我也配置了，后来发现需要安装***安装版***的系统影像，分享个链接[http://down.u567.cn:8080/soft/Windows%207%20x64.iso](http://down.u567.cn:8080/soft/Windows%207%20x64.iso)
+下载这个启动就可以了
+
+* lrzsz
+
+Linux上可以代替ftp上传下载的命令	
+
+	$ rz
+	$ sz
+
+
+* vim 插件Vundle
+
+安装地址：[https://github.com/VundleVim/Vundle.Vim#quick-start(https://github.com/VundleVim/Vundle.Vim#quick-start)
+
+命令无效解决:[https://blog.csdn.net/silinga/article/details/80059006](https://blog.csdn.net/silinga/article/details/80059006)
+
+插件库：[http://vim-scripts.org/vim/scripts.html](http://vim-scripts.org/vim/scripts.html)
+
+[Mardkown语法高亮](https://github.com/plasticboy/vim-markdown)
+[Markdown实时预览](https://github.com/suan/vim-instant-markdown)
+[代码智能补全](https://github.com/Valloric/YouCompleteMe#linux-64-bit)
+[代码智能补全2](https://www.cnblogs.com/Suzzz/p/4071880.html)
+
+* redshift 护眼软件
+
+	$ sudo add-apt-repository ppa:dobey/redshift-daily
+	$ sudo apt-get install redshift-gtk
+
+* fish-shell
+
+这是一个很好用的bash终端，比Ubuntu默认的好用，带有记忆功能
+更多使用参考[如何在 Linux 中安装、配置和使用 Fish Shell](https://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&mid=2666543850&idx=1&sn=fa2e99241d893294d303b4e24854b1c5&chksm=80dcfe41b7ab7757792a1f5710a0f83aa8f25a1bb948f372d9821ac1f652929c077d1926fc77&mpshare=1&scene=1&srcid=0321uBSy2q7DGTSWBypTvA6e&pass_ticket=TibiJijFE8acm%2BGL96Px4ivFOw17o4vfUD3hdvDYJRAisKw6r0BE%2B24gmCs91597#rd)
+
 ## apt 软件安装命令
 
 添加软件源
@@ -220,6 +259,35 @@ dpkg命令
 
 
 ## 常见问题
+
+### 启动sshd服务失败
+
+电脑断电后，重启，IP 被占用，然后修改IP,没有修改sshd_config中的ip所以失败了
+
+
+### 创建自启动服务
+
+网上找了很多，比较详细的是这个[ubuntu-server-18.04 设置开机启动脚本](http://www.cnblogs.com/defifind/p/9285456.html)
+
+### 解决vbox模拟器和android模拟器不能共存、
+
+命令
+	$ sudo rmmod kvm_intel kvm
+
+### 关闭Apache开机自启动
+
+[https://blog.csdn.net/geeksoarsky/article/details/80083557](https://blog.csdn.net/geeksoarsky/article/details/80083557)
+
+### 管理登录页面用户
+
+在启动电脑进入登录页面后你添加的用户都会显示在列表中，如果只想展示一个用户，需要进入`/var/lib/AccountsService/users`目录，该目录下列出了所有用户，打开对应的用户文件
+
+> [User]
+XSession=
+SystemAccount=false
+
+只要将SystemAccount = true即可
+
 
 ### Firefox无法在先播放音乐的问题
 
@@ -486,3 +554,20 @@ ssh免密码登录，想要通过ssh免密码远程登录另外一个主机，�
 	$ ssh-copy-id -o StrictHostKeyChecking=no xxx@xxx.xxx.x.xx
 
 这样就可以进行免密码登录了
+
+
+* [内存和Cpu相关命令](https://www.cnblogs.com/xd502djj/archive/2011/03/01/1968041.html)
+
+查看内存使用状况，类似Windows中任务管理器中效果
+
+	$ top 
+
+查看内存整体使用情况
+
+	$ free [-m ][- g] // 或者cat /proc/meminfo
+
+查看端口使用情况
+
+	$ netstat -tunlp |grep 80
+
+
