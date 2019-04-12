@@ -112,3 +112,56 @@ var map = mutableMapOf<String, String>().apply {
 }
 
 ```
+
+## 关于委托属性
+
+[委托属性+Sp使用](https://blog.csdn.net/zhang___yong/article/details/78355519)
+[玩转委托属性](https://www.jianshu.com/p/306bdc2bac3f)
+
+	setValue(thisRef: Any?, prop: KProperty<*>, value:  String)
+
+示例
+
+```
+class Example {
+
+	val token by Sp()
+
+	class Sp() {
+		operator fun getValue(thisRef: Any?, prop: KProperty<*>): String {
+	        return "$thisRef, thank you for delegating '${prop.name}' to me!"
+	    }
+
+	    operator fun setValue(thisRef: Any?, prop: KProperty<*>, value:  String) {
+	        println("$value has been assigned to ${prop.name} in $thisRef")
+	    }
+	}
+}
+```
+说明下参数，thisRef是持有属性的对象，上面例子就是Example, prop就是变量token， value就是给token赋的值
+
+## 关于@JvmStatic
+
+用于在Java中调用kotlin静态变量和方法的方式与Java一致
+
+[https://blog.csdn.net/maosidiaoxian/article/details/81778057](https://blog.csdn.net/maosidiaoxian/article/details/81778057)
+
+## 关于@JvmOverloads
+
+使用该注解，一个方法或者构造自动所有参数重载
+[https://www.jianshu.com/p/72d1959a7c56](https://www.jianshu.com/p/72d1959a7c56)
+
+## 关于Delegates.notNull()
+
+用于对变量如果使用时候会抛出`throw IllegalStateException(`
+
+示例： 
+
+	var context: Context by Delegates.notNull()
+
+如果在使用context时候为null则会抛出异常
+
+## 关于open
+
+使用open修饰的类可以被继承
+
