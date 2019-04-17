@@ -135,3 +135,10 @@ android.support.v4.app.FragmentManagerImpl.addFragment(FragmentManager.java:1891
 * Android Studio打包
 
 使用工具打包，需要在Android Studio中配置参数 路径 `File->Setting->Compiler->Command-line Options`中配置`-PversionName=1.2.3`
+
+## 使用Jetpack Navigation 时候没有图形化设计也没有Navigation选项
+
+Navigation功能需要手动开启，
+
+    Setting->Experimental->Editor->Enable Navigation
+

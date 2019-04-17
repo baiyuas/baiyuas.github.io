@@ -297,3 +297,98 @@ Android 8.0 对应用快捷方式做出了以下变更：
 ## 模拟器端口转发命令
     adb forward tcp:9999 tcp:9999
 
+## AsyncHttpClient增加对https支持
+
+项目网络框架使用的是android-async-http，不过现在基本很少人使用了，服务器接入了https，所以客户端也需要配置。可以通过`AsyncHttpClient`的`setSSLSocketFactory`方法设置。该方法需要传入一个`SSLSocketFactory`类型的对象。通过该对象的源码看到可以通过多种方式创建。如果是双向验证可以使用
+
+```
+    public SSLSocketFactory(
+            final KeyStore keystore,
+            final String keystorePassword,
+            final KeyStore truststore)
+                throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
+        this(SSLContexts.custom()
+                .loadKeyMaterial(keystore, keystorePassword != null ? keystorePassword.toCharArray() : null)
+                .loadTrustMaterial(truststore)
+                .build(),
+                BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+    }
+```
+keysore是服务器信任客户的使用的，需要使用到.p12文件。
+keystorePassword是对应keystore的密码，
+truststore是信任服务器证书 需要使用.bks文件
+
+如果是只信任服务器的证书可以使用`SSLSocketFactory`的子类`MySSLSocketFactory`，首先我们需要先生成.bks文件，参考下面链接
+[https://blog.csdn.net/qq_33237207/article/details/53376232](https://blog.csdn.net/qq_33237207/article/details/53376232)
+如果你使用keytool命令无效，可以切换到keytool目录下(JDK_HOME\jre\bin),然后执行就可以。执行命令需要输入密钥这个密钥下面代码会使用到
+
+```
+C:\Program Files\Java\jdk1.8.0_191\jre\bin>keytool -importcert -keystore C:\al.b
+ks -file C:\cert.crt -storetype BKS -provider org.bouncycastle.jce.provider.Boun
+cyCastleProvider
+输入密钥库口令:
+再次输入新口令:
+所有者: CN=t110, OU=ss, O=, L=shijiazhuang, ST=HB, C=CN
+发布者: CN=t110, OU=ss, O=, L=shijiazhuang, ST=HB, C=CN
+序列号: ce9c305d3c167fb9
+有效期为 Fri Jun 29 15:02:31 CST 2018 至 Sat Jun 29 15:02:31 CST 2019
+证书指纹:
+         MD5:  D7:55:11:40:14:F2:03:54:29:6A:F8:F4:30:C1:EC:3C
+         SHA1: B4:E8:C7:C2:AF:2E:BF:B0:D1:32:76:16:58:FA:62:28:09:C4:79:39
+         SHA256: 93:D6:FA:B4:03:0D:DC:A0:D6:23:66:F2:11:D7:83:1F:7C:45:4B:E8:B8:
+14:80:5C:7A:20:8C:7E:B4:A9:67:C8
+签名算法名称: SHA1withRSA
+主体公共密钥算法: 1024 位 RSA 密钥
+版本: 1
+是否信任此证书? [否]:  y
+证书已添加到密钥库中
+```
+
+将生成的bks文件拷贝到工程的`res\raw`目录下,配置如下代码：
+
+```
+
+
+private static MySSLSocketFactory getSocketFactory(Context context) {
+    MySSLSocketFactory sslFactory = null;
+    try {
+        KeyStore keyStore = KeyStore.getInstance("bks");
+        InputStream isCert = context.getResources().openRawResource(R.raw.al);
+
+        // HTTPS_PWD就是上面创建bks文件时候输入的密钥
+        keyStore.load(isCert, HTTPS_PWD.toCharArray());
+
+        sslFactory = new MySSLSocketFactory(keyStore);
+        // 下面的设置是解决javax.net.ssl.SSLException: hostname in certificate didn't match: 配置后其实是跳过了https的验证，不配值签名证书也可以访问
+        sslFactory.setHostnameVerifier(new AllowAllHostnameVerifier());
+    } catch (KeyStoreException e1) {
+        e1.printStackTrace();
+    } catch (NoSuchAlgorithmException e1) {
+        e1.printStackTrace();
+    } catch (CertificateException e1) {
+        e1.printStackTrace();
+    } catch (IOException e1) {
+        e1.printStackTrace();
+    } catch (UnrecoverableKeyException e1) {
+        e1.printStackTrace();
+    } catch (KeyManagementException e) {
+        e.printStackTrace();
+    }
+    return sslFactory;
+}
+
+...
+MySSLSocketFactory factory = getSocketFactory(context);
+if (factory != null) {
+    client.setSSLSocketFactory(factory);
+}
+
+```
+[相关链接](https://www.jianshu.com/p/64172ccfb73b)
+
+## AutoFill
+
+简单说就是实现表单自动提示，用户可以选择填写内容
+
+[Google官方Demo](https://github.com/googlesamples/android-AutofillFramework)
+[介绍](https://blog.csdn.net/ArJinMC/article/details/73331022)

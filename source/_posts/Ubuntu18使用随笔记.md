@@ -192,6 +192,45 @@ ssh服务器，安装命令
 	$ sudo apt install openssh-server
 
 
+* virtualbox
+
+[官网下载](https://www.virtualbox.org/wiki/Downloads)下载昊安装包后，通过`dpkg -i xxx.deb`安装。
+安装时候提示缺少依赖，按着提示安装即可
+
+我安装的是Win7系统，在新建虚拟机后，启动总是提示`No bootable medium found! System halted`错误，网上多数都是因为没有配置ios影像，我也配置了，后来发现需要安装***安装版***的系统影像，分享个链接[http://down.u567.cn:8080/soft/Windows%207%20x64.iso](http://down.u567.cn:8080/soft/Windows%207%20x64.iso)
+下载这个启动就可以了
+
+* lrzsz
+
+Linux上可以代替ftp上传下载的命令	
+
+	$ rz
+	$ sz
+
+
+* vim 插件Vundle
+
+安装地址：[https://github.com/VundleVim/Vundle.Vim#quick-start(https://github.com/VundleVim/Vundle.Vim#quick-start)
+
+命令无效解决:[https://blog.csdn.net/silinga/article/details/80059006](https://blog.csdn.net/silinga/article/details/80059006)
+
+插件库：[http://vim-scripts.org/vim/scripts.html](http://vim-scripts.org/vim/scripts.html)
+
+[Mardkown语法高亮](https://github.com/plasticboy/vim-markdown)
+[Markdown实时预览](https://github.com/suan/vim-instant-markdown)
+[代码智能补全](https://github.com/Valloric/YouCompleteMe#linux-64-bit)
+[代码智能补全2](https://www.cnblogs.com/Suzzz/p/4071880.html)
+
+* redshift 护眼软件
+
+	$ sudo add-apt-repository ppa:dobey/redshift-daily
+	$ sudo apt-get install redshift-gtk
+
+* fish-shell
+
+这是一个很好用的bash终端，比Ubuntu默认的好用，带有记忆功能
+更多使用参考[如何在 Linux 中安装、配置和使用 Fish Shell](https://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&mid=2666543850&idx=1&sn=fa2e99241d893294d303b4e24854b1c5&chksm=80dcfe41b7ab7757792a1f5710a0f83aa8f25a1bb948f372d9821ac1f652929c077d1926fc77&mpshare=1&scene=1&srcid=0321uBSy2q7DGTSWBypTvA6e&pass_ticket=TibiJijFE8acm%2BGL96Px4ivFOw17o4vfUD3hdvDYJRAisKw6r0BE%2B24gmCs91597#rd)
+
 ## apt 软件安装命令
 
 添加软件源
@@ -220,6 +259,35 @@ dpkg命令
 
 
 ## 常见问题
+
+### 启动sshd服务失败
+
+电脑断电后，重启，IP 被占用，然后修改IP,没有修改sshd_config中的ip所以失败了
+
+
+### 创建自启动服务
+
+网上找了很多，比较详细的是这个[ubuntu-server-18.04 设置开机启动脚本](http://www.cnblogs.com/defifind/p/9285456.html)
+
+### 解决vbox模拟器和android模拟器不能共存、
+
+命令
+	$ sudo rmmod kvm_intel kvm
+
+### 关闭Apache开机自启动
+
+[https://blog.csdn.net/geeksoarsky/article/details/80083557](https://blog.csdn.net/geeksoarsky/article/details/80083557)
+
+### 管理登录页面用户
+
+在启动电脑进入登录页面后你添加的用户都会显示在列表中，如果只想展示一个用户，需要进入`/var/lib/AccountsService/users`目录，该目录下列出了所有用户，打开对应的用户文件
+
+> [User]
+XSession=
+SystemAccount=false
+
+只要将SystemAccount = true即可
+
 
 ### Firefox无法在先播放音乐的问题
 
@@ -283,6 +351,27 @@ swappiness＝100的时候表示积极的使用swap分区，并且把内存上的
 修改`/dev/kvm`权限，同组用户都可以有读写权限
 
 	$ sudo chomd 771 /dev/kvm
+
+### ssh 登录sign_and_send_pubkey: signing failed: agent refused operation leo@liupengcheng.iok.la: Permission denied (publickey).
+
+```
+[root@node224 .ssh]# ssh node228
+sign_and_send_pubkey: signing failed: agent refused operation
+root@node228's password: 
+ 
+[root@node224 .ssh]# eval "$(ssh-agent -s)"
+Agent pid 5208
+[root@node224 .ssh]# ssh-add
+Identity added: /root/.ssh/id_rsa (/root/.ssh/id_rsa)
+[root@node224 .ssh]# ssh node228
+Last login: Fri May 11 16:25:20 2018 from 某个ip
+--------------------- 
+作者：tiankong_12345 
+来源：CSDN 
+原文：https://blog.csdn.net/tiankong_12345/article/details/80283404 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+```
+
 
 ## 常用操作
 
@@ -491,3 +580,115 @@ ssh免密码登录，想要通过ssh免密码远程登录另外一个主机，�
 	$ ssh-copy-id -o StrictHostKeyChecking=no xxx@xxx.xxx.x.xx
 
 这样就可以进行免密码登录了
+
+
+* [内存和Cpu相关命令](https://www.cnblogs.com/xd502djj/archive/2011/03/01/1968041.html)
+
+查看内存使用状况，类似Windows中任务管理器中效果
+
+	$ top 
+
+查看内存整体使用情况
+
+	$ free [-m ][- g] // 或者cat /proc/meminfo
+
+查看端口使用情况
+
+	$ netstat -tunlp |grep 80
+
+
+## 防火墙
+
+1. 安装
+
+sudo apt-get install ufw
+
+2. 启用
+
+sudo ufw enable
+
+sudo ufw default deny
+
+运行以上两条命令后，开启了防火墙，并在系统启动时自动开启。关闭所有外部对本机的访问，但本机访问外部正常。
+
+3. 开启/禁用
+
+sudo ufw allow|deny [service]
+
+打开或关闭某个端口，例如：
+
+	$ sudo ufw allow smtp　允许所有的外部IP访问本机的25/tcp (smtp)端口
+	$ sudo ufw allow 22/tcp 允许所有的外部IP访问本机的22/tcp (ssh)端口
+	$ sudo ufw allow 53 允许外部访问53端口(tcp/udp)
+	$ sudo ufw allow from 192.168.1.100 允许此IP访问所有的本机端口
+	$ sudo ufw allow proto udp 192.168.0.1 port 53 to 192.168.0.2 port 53
+	$ sudo ufw deny smtp 禁止外部访问smtp服务
+	$ sudo ufw delete allow smtp 删除上面建立的某条规则
+
+4.查看防火墙状态
+
+	$ sudo ufw status
+
+一般用户，只需如下设置：
+
+	$ sudo apt-get install ufw
+	$ sudo ufw enable
+	$ sudo ufw default deny
+
+以上三条命令已经足够安全了，如果你需要开放某些服务，再使用sudo ufw allow开启。
+
+开启/关闭防火墙 (默认设置是’disable’)
+
+	$ sudo ufw enable|disable
+
+转换日志状态
+
+	$ sudo ufw logging on|off
+
+设置默认策略 (比如 “mostly open” vs “mostly closed”)
+
+	$ sudo ufw default allow|deny
+
+许 可或者屏蔽端口 (可以在“status” 中查看到服务列表)。可以用“协议：端口”的方式指定一个存在于/etc/services中的服务名称，也可以通过包的meta-data。 ‘allow’ 参数将把条目加入 /etc/ufw/maps ，而 ‘deny’ 则相反。基本语法如下：
+
+	$ sudo ufw allow|deny [service]
+
+显示防火墙和端口的侦听状态，参见 /var/lib/ufw/maps。括号中的数字将不会被显示出来。
+
+	$ sudo ufw status
+
+UFW 使用范例：
+
+允许 53 端口
+
+	$ sudo ufw allow 53
+
+禁用 53 端口
+
+	$ sudo ufw delete allow 53
+
+允许 80 端口
+
+	$ sudo ufw allow 80/tcp
+
+禁用 80 端口
+
+	$ sudo ufw delete allow 80/tcp
+
+允许 smtp 端口
+
+	$ sudo ufw allow smtp
+
+删除 smtp 端口的许可
+
+	$ sudo ufw delete allow smtp
+
+允许某特定 IP
+
+	$ sudo ufw allow from 192.168.254.254
+
+删除上面的规则
+
+	$ sudo ufw delete allow from 192.168.254.254
+
+以上防火墙内容转自[https://www.cnblogs.com/OnlyDreams/p/7210914.html](https://www.cnblogs.com/OnlyDreams/p/7210914.html)
