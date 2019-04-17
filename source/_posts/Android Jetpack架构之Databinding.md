@@ -1,14 +1,15 @@
 ---
-title: Android Jetpack架构之Databinding
+title: Android-Jetpack架构之Databinding
 date: 2018-09-19 19:50:38
 categories: Android
 tags: 
-    - Android
-    - Jetpack
-    - Databinding
----
+	- Android
+	- Jetpack
+	- Databinding
+---  
 
-Databinding是谷歌提供的一套支持库，可以让你将数据绑定到布局文件中。对于这个高大上的东西我觉得还是学习官方文档更加有效，而且官方文档讲解的也比较详细，虽然有中文版本，但是感觉还是自己翻译学习比较有效果。所以有了这边译文。
+
+Databinding是谷歌提供的一套支持库，可以让你将数据绑定到布局文件中。对于这个高大上的东西我觉得还是学习官方文档更加有效，而且官方文档讲解的也比较详细，虽然有中文版本，但是感觉还是自己翻译学习比较有效果，所以有了这篇译文，同时对于官方文档讲解不清晰的地方，我也会添加一些说明。
 
 后续我会将Jetpack系列框架都翻译学习下。主要包含
 
@@ -96,7 +97,7 @@ Android Studio支持许多对Data Binding代码编辑的支持。例如支持以
 * 生成的绑定类对于当前的modules可以打包到aar文件里。其他依赖这个modlues的modlues不会生成绑定类
 * 对于Adapter绑定对于依赖他的modlues事无效的，它对自己的modlues有作用
 
-## 在布局中绑定
+## 布局和绑定表达式
 
 你可以在布局中使用表达式语言来处理视图事件。在布局文件中用你的数据对象绑定的views,这个Databinding库将会自动对应的类
 
@@ -129,9 +130,15 @@ Android Studio支持许多对Data Binding代码编辑的支持。例如支持以
 
 在布局文件中使用表达式`@{}`的方式将变量的值赋予到组件中去。这里`TextView`设置了变量`user`的`firstName`的属性值
 
+```
 	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@{user.firstName}" />
+```
+
+编译过后会生成对应的java文件，如果想要自定义DataBinding名可以通过`data`标签的`class`属性类设置，如：
+
+	<data class="MainBinding" >....</data>
 
 ### 数据对象
 
@@ -307,9 +314,209 @@ android:text="@{@plurals/orange(count, count)}"
 
 #### 事件处理
 
+Databinding允许你通过表达式来处理View事件(例如，`onClick`方法)。通常监听器方法名称作为事件的属性名称,例如`View.OnClickListener`有一个方法`onClick()`，因此事件属性就是`android:onClick`。
 
+对于点击事件有一些专门的事件处理而不仅仅是`andriod:onClick`。例如你可以使用下面的属性来避免事件类型的冲突：
+
+| Class | Listner setter | Attribute |
+| -------- | --------: | :------: |
+| SearchView | setOnSearchClickListener(View.OnClickListener) | android:onSearchClick |
+| ZoomControls | setOnZoomInClickListener(View.OnClickListener) | android:onSearchClick |
+| ZoomControls | setOnZoomOutClickListener(View.OnClickListener) | android:onSearchClick |
+
+你也可以使用下面两种途径来处理事件
+
+* 方法引用
+
+在表达式中，你可以引用方法确保监听方法的唯一。当表达式作为一个方法引用，Databinding将会绑定该方法和持有方法的对象在监听器里，同时设置该监听器到目标`View`上。如果表达式为`null`，则Databinding不会创建监听而是用`null`。
+
+事件可以直接绑定处理方法。类似`android:onClick`可以在一个活动中创建对应的方法。相比于`View`的`onClick`属性，在表达式中绑定最大优势就是在编译时检测，如果方法不存在则会出现编译错误。
+
+方法引用与监听器绑定最大不同是在数据绑定时候被创建，而不是在事件被触发的时候。如果你想在事件发生时候选择在表达式中绑定数据，你应该通过监听器的绑定
+
+将事件指派给处理者时候，用一个正常的绑定表达式的值就是被调用的方法名称，例如下面示例：
+```
+class MyHandler {
+
+	fun clickMyFriend(view: View) {....}
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+   <data>
+       <variable name="handlers" type="com.example.MyHandlers"/>
+       <variable name="user" type="com.example.User"/>
+   </data>
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <TextView android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@{user.firstName}"
+           android:onClick="@{handlers::onClickFriend}"/>
+   </LinearLayout>
+</layout>
+
+```
+
+* 绑定监听器监听
+
+监听绑定就是在事件发生时候绑定表达式，这类似于方法引用，但是可以更自由的绑定数据在表达式。这些特性必须在Gradle插件2.0以上支持
+
+在方法引用中，方法的参数必须与事件监听的参数匹配(例如：`CheckBox`的`onCheckedChanged`事件参数是`(CompoundButton buttonView, boolean isChecked)`, 所以方法引用中事件处理引用的方法参数也必须是`(CompoundButton buttonView, boolean isChecked)`。在监听器绑定中，返回的参数必须是监听事件要求的返回类型。例如下面方式：
+
+```
+class Presenter {
+	 fun onSaveClick(task: Task) {}
+}
+
+在xml中绑定
+
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="task" type="com.android.example.Task" />
+        <variable name="presenter" type="com.android.example.Presenter" />
+    </data>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:onClick="@{() -> presenter.onSaveClick(task)}" />
+    </LinearLayout>
+</layout>
+```
+
+***注***
+
+> 这里对于方法引用和绑定监听器直译官方文档理解笔记晦涩，简单说方法引用就是你在处理点击事件`MyHandler`的`clickMyFriend(view: View)`并不需要传入数据，调用方法`@{handlers::onClickFriend}`。如果你需要点击事件的方法里传入参数，那么你就需要使用绑定监听器在调用时候使用`@{()->handlers.clickMyFriend(task)}`。
+> 
+> 方法引用其实也可以携程绑定监听的方式, 如：`@{(theView)->handlers.onClickFriend(theView)}`
+
+* 避免复杂的监听表达式
+
+监听表达式是非常有用的，可以使你的代码更容易却阅读，但是另一方面，也要避免复杂的表达式，那样会降低代码可读性。
+
+
+#### Imports, Variables, 和Includes
+
+数据绑定库提供了诸如`imports`, `variables`和`includes`的特性，`imports`方便的将引用类放在布局文件中使用，`Variables`允许你描述属性在绑定表达式中。`Includes`让你重用复杂的布局
+
+**Imports**
+
+`import`被用于`<data>`标签内，可以使用0个或者多个`import`元素。如下：
+
+```
+<data>
+	<import type="android.view.View" />
+</data>
+```
+
+引入`View`以后，你可以在你的表达式中使用`View`中的方法诸如`VISIBLE`和`GONE`。
+
+```
+<TextView
+	android:text="@{user.lastName}"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:visibility="@{user.isAdult ? View.VISIBLE : View.GONE}"
+```
+
+当类的名字相同时候，可以通过`alias`来给类设置别名，如下将`com.example.view.View`包的`View`设置`Vista`的别名
+
+```
+<import android.view.View />
+<import com.example.view.View alias="Vista" />
+```
+
+可以导入静态类，在表达式中使用静态方法。如下；
+
+```
+<data>
+    <import type="com.example.MyStringUtils"/>
+    <variable name="user" type="com.example.User"/>
+</data>
+…
+<TextView
+   android:text="@{MyStringUtils.capitalize(user.lastName)}"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"/>
+```
+
+布局文件中不同于Java代码不会自动实现导入类型
+
+**Valiables**
+
+你可以在`data`标签下使用多个`variable`元素。每个`variable`元素描述了一个可能在布局文件的表达式中使用的属性。下面示例展示了`user`, `image`,和`not`变量
+
+```
+<data>
+    <import type="android.graphics.drawable.Drawable"/>
+    <variable name="user" type="com.example.User"/>
+    <variable name="image" type="Drawable"/>
+    <variable name="note" type="String"/>
+</data>
+```
+
+变量类型将会在编译时期进行检查，因此如果变量使用了`Observale`或者是`observable collection`,将会反映在类型中(也既编译时检测`Observable<T>`中的`T`)。如果变量没有实现`Obserable`接口，变量将不会被观察
+
+Databinding库生成的类包含变量的setter和getter方法。如果代码没有给布局中的变量初始化值，则使用默认的`null`，`0`, `false`等
+
+**Includes**
+
+变量可以传递到`include`的标签包含进的布局中使用，通过自定义的命名空间绑定变量。下面示例展示被传递的`user`变量到`name.xml`中
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+   <data>
+       <variable name="user" type="com.example.User"/>
+   </data>
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <include layout="@layout/name"
+           bind:user="@{user}"/>
+   </LinearLayout>
+</layout>
+```
+
+> ***注***
+> 这里官方文档讲解的不是很明白，上面我们通过`bind:user="@{user}"`将`user`对象传递给了子布局`name.xml`，特别说明的是在子布局中也要声明使用的user的变量,`name.xml`定义的`user`变量也必须和父布局中`bind:user`的`user`保持一致如下示例，这里原因可以通过编译后的文件更清晰的理解
+```
+// name.xml
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+   <data>
+       <variable name="user" type="com.example.User"/>
+   </data>
+   ....
+</layout>
+```
+
+Databinding并不支持`include`标签作为`merge`标签的直接子元素,例如下面布局将不被支持
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+   <data>
+       <variable name="user" type="com.example.User"/>
+   </data>
+   <merge><!-- Doesn't work -->
+       <include layout="@layout/name"
+           bind:user="@{user}"/>
+       <include layout="@layout/contact"
+           bind:user="@{user}"/>
+   </merge>
+</layout>
+```
 
 ## UI数据同步变化
+
+
 
 ## 在代码中使用Databinding
 

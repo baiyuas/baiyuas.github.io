@@ -427,6 +427,11 @@ $ ./gradlew assembleRelease
 	
 	$ df -hl
 
+* 将文本内容复制到剪切板
+
+命令
+	$ pbcopy < xx.txt
+
 * 搜索文件
 
 命令
