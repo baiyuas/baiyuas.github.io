@@ -1,12 +1,14 @@
 ---
-title: Kotlin 笔记
+title: 关于Kotlin的那些事
 date: 2018-03-07 16:46:38
 categories: Android
 tags:
 	- Kotlin
 ---
 
+！[Kotlin Label](http://img5.imgtn.bdimg.com/it/u=241871401,855761362&fm=26&gp=0.jpg)
 Kotlin学习过程中记录的笔记，部分内容会与Java做对比，更好的认识Kotlin
+
 <!-- more -->
 
 ## 关于this
@@ -165,3 +167,64 @@ class Example {
 
 使用open修饰的类可以被继承
 
+## 关于内联扩展函数
+
+参考[Kotlin系列之let、with、run、apply、also函数的使用](https://blog.csdn.net/u013064109/article/details/78786646#4)
+
+1. **let**
+
+`let`主要用于对空判断，在函数块内通过it替代对象本身，返回函数块最后一行或者return表达式
+
+```
+	activity?.let {
+		it.startActivity(...)
+	}
+```
+
+2. **with**
+
+`with`用于调用同一个类，省略类名重复，可以在代码块中直接调用方法,
+
+```
+val responseBody = response.body()
+with(responseBody) {
+	println(string())
+}
+// 等同于responseBody.string()
+```
+
+3. **run**
+
+具备了let和with优点，可以用于对空的判断，还可以在代码块中直接调用方法，返回值为最后一行或者return
+
+```
+val value = activity?.run {
+	startActivity(...)
+	"ccc"
+}
+println(value) // ccc
+```
+
+4. **apply**
+
+用法与run类似，不同的是返回的是对象本身
+
+```
+val value = activity?.run {
+	startActivity(...)
+}
+
+// value为activity
+```
+
+5. **also**
+
+用法与let类似，返回的是对象本身
+
+```
+val value = activity?.also {
+	startActivity(...)
+}
+// value为activity
+```
+## 关于
