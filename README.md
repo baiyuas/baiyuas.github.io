@@ -35,7 +35,7 @@
 	
 	window.onload = function() {
 		let title = document.querySelector("h1.project-name");
-		title.text = "清风徐来,水波不兴";
+		title.innerText = "清风徐来,水波不兴";
 	}
 
 </script>
