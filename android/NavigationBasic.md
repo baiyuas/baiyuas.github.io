@@ -292,32 +292,136 @@ class NavArgsLazy<Args : NavArgs>(
 
 ## Deeplink跳转
 
-Deeplink可以让我们在app外或者启动活动后,直接跳转到指定的Deeplink页面
+Deeplink可以让我们在app外或者启动活动后,直接跳转到指定的Deeplink页面. 该功能类似ARouter中我们指定链接后,在浏览器拉起App跳转到指定页面.
+
+我们新建一个DeeplinkFragment来展示Deeplink跳转效果.然后在nav_simple.xml中,通过图形设计面板右侧,点击`Deep Links +`,输入链接
+
+![](https://baiyuas.github.io/img/nav07.png)
+
+![](https://baiyuas.github.io/img/nav08.png)
 
 
+在xml文件中会生成如下代码:
 
-adb shell am start -a android.intent.action.VIEW -d "http://www.deeplink.com/adb"
+```
+    <fragment
+            android:id="@+id/deeplinkFragment"
+            android:name="com.example.navigation.DeeplinkFragment"
+            android:label="DeeplinkFragment">
 
+
+        <deepLink
+                android:id="@+id/deepLink"
+                app:uri="www.example.com" />
+    </fragment>
+```
+
+我们在清单文件中使用该Fragment的Activity添加intent-filter
+
+```
+.....
+
+<activity android:name=".MainActivity"
+            android:theme="@style/BaseAppTheme">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+
+        <nav-graph android:value="@navigation/nav_simple" />
+</activity>
+......
+```
+
+这样在外部通过链接进入App,就可以直接打开页面. 这里是通过`<nav-graph>`标签,在编译打包后,会自动转化为`<intent-filter>`,但是默认的`scheme`为***http,https***. 如果自定义的可以自己注册intent-filter
+
+```
+<intent-filter android:autoVerify="true">
+    <action android:name="android.intent.action.VIEW"/>
+    <category android:name="android.intent.category.DEFAULT"/>
+    <category android:name="android.intent.category.BROWSABLE"/>
+    <data android:scheme="juejin" android:host="www.deeplink.com" android:pathPattern="/.*"/>
+</intent-filter>
+```
+
+
+* 场景1
+
+安装好App后,我们用adb命令,通过链接打开指定的页面
+
+    adb shell am start -a android.intent.action.VIEW -d "http://www.deeplink.com"
+
+* 场景2
+
+通过PendingIntent拉起指定页面,这里通过NavDeepLinkBuilder可以构建PendingIntent
+
+```
+NavDeepLinkBuilder(context)
+        .setGraph(R.navigation.nav_simple)
+        .setDestination(R.id.deeplinkFragment)
+        .setArguments(Bundle().apply {
+            putString("Arg_From", "AppWidget")
+        })
+        .createPendingIntent()
+```
+
+* 场景3
+
+通过h5唤起App,这里一般就需要自己定义scheme(非http,https),否则浏览器会识别为链接打开,不会拉起App(Google Chrome除外)
 
 ## 跳转动画
 
-xml布局实现
+Fragment切换可以通过给`<action>`配置如下属性实现
 
+* app:enterAnim
+
+进入页面动画
+
+* app:exitAnim
+
+退出页面动画
+
+* app:popEnterAnim
+
+退出页面再次显示动画
+
+* app:popExitAnim
+
+进入页面被弹出动画
+
+如下示例:
+
+        <action
+                android:id="@+id/action_secondFragment_to_animFragment"
+                app:destination="@id/animFragment"
+                app:enterAnim="@anim/right_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/left_in"
+                app:popExitAnim="@anim/right_out"
+                app:popUpTo="@id/firstFragment" />
 
 
 代码实现 
 
+NavController中有个重载的方法
 
+    navigate(@NonNull NavDirections directions, @Nullable NavOptions navOptions)
 
+NavOptions与xml中<action>属性是对应的,所以可以通过NavOptions.Builder设置动画
 
-androidx.navigation.NavOptions与xml中<action>属性是对应的
+```
+findNavController().navigate(
+    SecondFragmentDirections.actionSecondFragmentToAnimFragment(), NavOptions.Builder()
+        .setEnterAnim(R.anim.nav_default_enter_anim)
+        .setExitAnim(R.anim.nav_default_exit_anim)
+        .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+        .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+        .build()
+)
+```
 
-
-navigate(@NonNull NavDirections directions, @Nullable NavOptions navOptions)
-NavOptions.Builder构造NavOptions,实现xml中<action>属性效果
-
-
-#### ***弹出返回popUp属性***
+***说明:弹出返回popUp属性***
 
 popUp指定的页面必须在返回堆栈内,否则无效固
 popUpToInclusive true 则指定要返回的页面也会弹出堆栈
@@ -332,28 +436,154 @@ A->B 设置的action的动画app:popExitAnim作用于B退出
 
 ## 共享元素切换
 
-Navigation也支持共享元素的切换. 在跳转时候,增加指定的参数即可
+Navigation也支持共享元素的切换.通过调用NavController重载的navigate方法
+
+    public void navigate(@NonNull NavDirections directions,
+            @NonNull Navigator.Extras navigatorExtras) 
+
+参数1是掉转目标,参数2指定共享的View,如下
 
 ```
-
+            val extra = FragmentNavigatorExtras(
+                iv_thumb to SHARE_ELEMENT_NAME
+            )
+            findNavController().navigate(
+                FirstFragmentDirections.actionFirstFragmentToShareElementFragment(),
+                extra
+            )
 ```
+
+注意这里的SHARE_ELEMENT_NAME与下面给View设置的`transitionName`属性值是相同的
+
+同时需要在两个Fragment的xml布局中对共享的View设置如下属性,并且值相同
+
+     android:transitionName=""
+
 
 ## 对话框
 
+对话框是使用DialogFragment,而DialogFragment本身就是集成Fragment,所以对话框的使用和导航Fragment使用方法是一样的,不同之处就是navigation的xml文件中使用的是`<dialog>`标签
+
+```
+    <dialog
+            android:id="@+id/navDialogFragment"
+            android:name="com.example.navigation.NavDialogFragment"
+            android:label="NavDialogFragment"
+            tools:layout="@layout/dialog_update_layout" />
+```
 
 
-## 整合DrawerLayout
+## 整合DrawerLayout和BottomNavigationView
 
-AppBarConfiguration的使用
+对于与DrawableLayout,BottomNavigationView一起使用主要依靠NavigationUI这个工具类,
+通过重载setupWithNavController来实现对Toolbar, DrawableLayout等组件的组合控制
 
-如果使用NavigationView 使用的menu中item的Id必须与navigation/下xml文件中配置的`<fragment>`的Id保持一直
+- 与DrawableLayout组合
 
-## 整合BottomNavigationView
+协调DrwableLayout是通过调用下面方法实现
+
+    public static void setupWithNavController(@NonNull final NavigationView navigationView,
+            @NonNull final NavController navController) 
 
 
+协调BottomNavigationView是通过调用下面方法实现
+
+    public static void setupWithNavController(
+            @NonNull final BottomNavigationView bottomNavigationView,
+            @NonNull final NavController navController) {
+
+核心代码示例:
+
+```
+        ....
+        navController = findNavController(R.id.drawer_nav_fragment)
+
+        appBarConfiguration = AppBarConfiguration(navController.graph, drawer_layout)
+
+        // Set up ActionBar
+        setSupportActionBar(toolbar)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+        // Set up navigation menu
+        navigation_view.setupWithNavController(navController)
+
+        // if bottomNavigationView
+        bottom_nav_view.setupWithNavController(navController)
+```
+
+在布局文件中BottomNavigationView和NavigationView都要指定`app:menu`属性. 这里要注意一点,`res/menu`下创建的文件中`<item>`标签的Id必须与`res/navigation`下fragment的id相同才可以实现点击效果
+
+res/menu/bottom_nav_menu.xml
+
+```
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/home"
+            android:contentDescription="@string/cd_home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/title_home" />
+    <item
+            android:id="@+id/list"
+            android:contentDescription="@string/cd_list"
+            android:icon="@drawable/ic_list"
+            android:title="@string/title_list" />
+    <item
+            android:id="@+id/register"
+            android:contentDescription="@string/cd_form"
+            android:icon="@drawable/ic_feedback"
+            android:title="@string/title_register" />
+</menu>
+
+```
+
+res/navigation/nav_bottom.xml
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/nav_bottom_simple"
+        app:startDestination="@id/home">
+
+    <fragment
+            android:id="@+id/home"
+            android:name="com.example.navigation.nav.Home"
+            android:label="Home" />
+    <fragment
+            android:id="@+id/list"
+            android:name="com.example.navigation.nav.List"
+            android:label="List" />
+    <fragment
+            android:id="@+id/register"
+            android:name="com.example.navigation.nav.Register"
+            android:label="Register" />
+</navigation>
+```
+我们可以通过NavigationUI中的代码找到答案
+
+```
+
+    public static boolean onNavDestinationSelected(@NonNull MenuItem item,
+            @NonNull NavController navController) {
+                .....
+        NavOptions options = builder.build();
+        try {
+            //TODO provide proper API instead of using Exceptions as Control-Flow.
+            navController.navigate(item.getItemId(), null, options); // MenuItem的Id也是导航fragment的Id
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        .....
+
+```
 
 
-#### **番外:踩坑小记**
+至此Navigation组件的使用介绍完成,欢迎start[![star](https://gitee.com/baiyuas/ExampleNavigation/badge/star.svg?theme=dark)](https://gitee.com/baiyuas/ExampleNavigation)
+
+
+#### **题外:踩坑小记**
 
 更新了AndroidStudio 3.6Canary 3 到 3.6Canary 4编译后报错,记录下:
 
@@ -364,26 +594,3 @@ kotlin_version = 1.3.40
 gradle_plugin = 3.6.0-alpha04 否则报错
 
 constrain-layout 2.0.0-alpha3以下可以,以上的版本编译报错
-
-https://www.cnblogs.com/guanxinjing/p/10303047.html
-https://blog.csdn.net/hepann44/article/details/80678217
-
-
-RN:
-
-1. Linux上初始化RN工程,第一次运行失败:
-https://segmentfault.com/a/1190000019529044?utm_source=tag-newest
-https://facebook.github.io/react-native/docs/troubleshooting#content
-
-echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
-2. 运行后,在模拟器Double R总是红屏报错:Could not connect to development server
-
-https://blog.csdn.net/qq_25827845/article/details/52974991
-
-没有运行服务,使用命令 react-native start一般就可以
-
-
-
-
-
