@@ -1,3 +1,13 @@
+<script type="text/javascript">
+    
+    window.onload = function() {
+        let title = document.querySelector("h1.project-name");
+        title.innerText = "王侯不拜雨烟屐, 方知无欲是逍遥";
+        title.style.fontStyle = 'italic'
+    }
+
+</script>
+
 
 # AppWidget桌面小组件实战
 
