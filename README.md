@@ -63,7 +63,7 @@ div.list {
 <tr>
   <td rowspan="12">Android</td>
   <td rowspan="3">Android 开发实战</td>
-  <td><a href="./android/AppWidget.md">AppWidget桌面小组件</a></td>
+  <td><a href="./android/AppWidget">AppWidget桌面小组件</a></td>
 </tr>
 <tr>
   <td>Shotcuts桌面快捷方式</td>
@@ -73,7 +73,7 @@ div.list {
 </tr>
 <tr>
   <td rowspan="9">Android系统架构组件</td>
-  <td><a href="./android/NavigationBasic.md">Android系统架构组件之Navigation</a></td>
+  <td><a href="./android/NavigationBasic">Android系统架构组件之Navigation</a></td>
 </tr>
 <tr>
   <td>Android系统架构组件之Room</td>
@@ -108,9 +108,11 @@ div.list {
 
 <h2>Android 开发实战</h2>
 
-<h3><a href="./android/AppWidget.md">AppWidget桌面小组件</a></h3>
+<h4><a href="./android/AppWidget">AppWidget桌面小组件</a></h4>
 
 <h2>Android系统架构组件</h2>
-<h3><a href="./android/NavigationBasic.md">Android系统架构组件之Navigation</a></h3>
+
+<h4><a href="./android/NavigationBasic">Android系统架构组件之Navigation</a></h4>
+
 </div>
 
