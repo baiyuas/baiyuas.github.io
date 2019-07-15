@@ -15,7 +15,7 @@
 table.gridtable {
     width: 100%;
     font-family: verdana,arial,sans-serif;
-	font-size:11px;
+	font-size:1em;
 	color:#333333;
 	border-width: 1px;
 	border-color: #666666;
@@ -51,7 +51,7 @@ a {
 <tr>
   <td rowspan="12">Android</td>
   <td rowspan="3">Android 开发实战</td>
-  <td>[AppWidget桌面小组件](./android/AppWidget.md)</td>
+  <td><a href="./android/AppWidget.md">AppWidget桌面小组件</a></td>
 </tr>
 <tr>
   <td>Shotcuts桌面快捷方式</td>
@@ -61,7 +61,7 @@ a {
 </tr>
 <tr>
   <td rowspan="9">Android系统架构组件</td>
-  <td>[Android系统架构组件之Navigation](./android/NavigationBasic.md)</td>
+  <td><a href="./android/NavigationBasic.md">Android系统架构组件之Navigation</a></td>
 </tr>
 <tr>
   <td>Android系统架构组件之Room</td>
