@@ -14,6 +14,7 @@
 <style type="text/css">
 table.gridtable {
     width: 100%;
+    display: table;
     font-family: verdana,arial,sans-serif;
 	font-size:1em;
 	color:#333333;
