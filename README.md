@@ -2,13 +2,10 @@
 
 
 <script type="text/javascript">
-	
-	window.onload = function() {
+
 		let title = document.querySelector("h1.project-name");
 		title.innerText = "王侯不拜雨烟屐, 方知无欲是逍遥";
 		title.style.fontStyle = 'italic'
-	}
-
 </script>
 
 <style type="text/css">
@@ -39,6 +36,20 @@ table.gridtable td {
 
 a {
 	text-decoration: none;
+}
+
+div.list {
+	display: none;
+}
+
+@media screen and (max-width: 42em) {
+	table.gridtable {
+		display: none;
+	}
+
+	div.list {
+		display: block;
+	}
 }
 </style>
 
@@ -90,4 +101,16 @@ a {
   <td>Android系统架构组件之ViewModel</td>
 </tr>
 </table>
+
+<div class="list">
+
+<h1>Android</h1>
+
+<h2>Android 开发实战</h2>
+
+<h3><a href="./android/AppWidget.md">AppWidget桌面小组件</a></h3>
+
+<h2>Android系统架构组件</h2>
+<h3><a href="./android/NavigationBasic.md">Android系统架构组件之Navigation</a></h3>
+</div>
 

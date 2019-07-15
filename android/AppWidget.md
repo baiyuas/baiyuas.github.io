@@ -1,13 +1,15 @@
 <script type="text/javascript">
-    
-    window.onload = function() {
+        var head = document.getElementsByTagName('head')[0],
+        meta = document.createElement('meta');
+        meta.setAttribute('content','text/html; charset=utf-8');
+        head.appendChild(meta);
+
+
         let title = document.querySelector("h1.project-name");
         title.innerText = "王侯不拜雨烟屐, 方知无欲是逍遥";
-        title.style.fontStyle = 'italic'
-    }
+        title.style.fontStyle = 'italic';
 
 </script>
-
 
 # AppWidget桌面小组件实战
 
